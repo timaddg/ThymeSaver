@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -33,21 +32,26 @@ app.get('/api/ingredients', (req, res) => {
   res.json({ success: true, ingredients });
 });
 
-// Routes
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'ThymeSaver API Server', 
-    status: 'running',
-    endpoints: {
-      '/api/generate-plan': 'POST - Generate meal plans with Gemini AI',
-      '/api/chat': 'POST - Chat with Gemini AI',
-      '/api/health': 'GET - Health check'
-    }
-  });
+// Delete an ingredient
+app.delete('/api/ingredients/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = ingredients.findIndex(ingredient => ingredient.id === id);
+  
+  if (index === -1) {
+    return res.status(404).json({ error: 'Ingredient not found' });
+  }
+  
+  ingredients.splice(index, 1);
+  res.json({ success: true, message: 'Ingredient deleted successfully' });
 });
 
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'OK', 
+    message: 'ThymeSaver API server is running',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Generate Meal Plan endpoint
@@ -153,6 +157,21 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// Root endpoint - API info
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'ThymeSaver API Server', 
+    status: 'running',
+    endpoints: {
+      '/api/ingredients': 'GET - List ingredients, POST - Add ingredient, DELETE - Delete ingredient',
+      '/api/generate-plan': 'POST - Generate meal plans with Gemini AI',
+      '/api/chat': 'POST - Chat with Gemini AI',
+      '/api/health': 'GET - Health check'
+    },
+    note: 'Frontend is served separately on port 3001'
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -165,6 +184,6 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 ThymeSaver server running on http://localhost:${PORT}`);
-  console.log(`📝 API Documentation available at http://localhost:${PORT}`);
+  console.log(`🚀 ThymeSaver API server running on http://localhost:${PORT}`);
+  console.log(`📝 Frontend should be running on http://localhost:3001`);
 }); 
