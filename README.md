@@ -1,4 +1,4 @@
-# ThymeSaver Server
+# ThymeSaver
 
 A Node.js Express server with Google Gemini AI integration for intelligent time management and productivity features.
 
