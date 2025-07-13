@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
@@ -9,6 +10,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -157,19 +161,9 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Root endpoint - API info
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'ThymeSaver API Server', 
-    status: 'running',
-    endpoints: {
-      '/api/ingredients': 'GET - List ingredients, POST - Add ingredient, DELETE - Delete ingredient',
-      '/api/generate-plan': 'POST - Generate meal plans with Gemini AI',
-      '/api/chat': 'POST - Chat with Gemini AI',
-      '/api/health': 'GET - Health check'
-    },
-    note: 'Frontend is served separately on port 3001'
-  });
+// Catch-all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
 // Error handling middleware
@@ -178,15 +172,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint not found' });
-});
-
 app.listen(PORT, () => {
-  console.log(`🚀 ThymeSaver API server running on http://localhost:${PORT}`);
-  console.log(`📝 Frontend should be running on http://localhost:3001`);
-}); 
+  console.log(`🚀 ThymeSaver server running on http://localhost:${PORT}`);
+  console.log(`📱 Frontend and API served from single port`);
+});
 
 const { Pool } = require('pg');
 require('dotenv').config();
