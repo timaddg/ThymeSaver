@@ -60,23 +60,23 @@ const IngredientSection: React.FC = () => {
   return (
     <section className="recipe-section">
       <h2 className="recipe-section-title">Ingredients & Ideas</h2>
-      <form className="ingredient-form" style={{marginBottom: '2rem'}} onSubmit={handleAdd} autoComplete="off">
-        <div style={{position: 'relative', width: '60%', display: 'inline-block', marginRight: '1rem'}}>
+      <form className="ingredient-form" onSubmit={handleAdd} autoComplete="off">
+        <div className="ingredient-input-group">
           <input
             type="text"
             placeholder="Enter an ingredient (e.g., onions, tomato)"
             value={ingredient}
             onChange={handleIngredientChange}
-            style={{padding: '0.7rem 1.2rem', borderRadius: '1.5rem', border: '1.5px solid #e0e0e0', fontSize: '1rem', width: '100%'}}
+            className="ingredient-input"
             onFocus={() => ingredient && setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul style={{position: 'absolute', left: 0, right: 0, top: '110%', background: '#fff', border: '1px solid #e0e0e0', borderRadius: '1rem', zIndex: 10, listStyle: 'none', margin: 0, padding: '0.3rem 0'}}>
+            <ul className="suggestions-list">
               {suggestions.map(s => (
                 <li
                   key={s}
-                  style={{padding: '0.5rem 1.2rem', cursor: 'pointer'}}
+                  className="suggestion-item"
                   onMouseDown={() => handleSuggestionClick(s)}
                 >
                   {s}
@@ -90,18 +90,18 @@ const IngredientSection: React.FC = () => {
           placeholder="Quantity (e.g., 2, 1 cup, 500g)"
           value={quantity}
           onChange={e => setQuantity(e.target.value)}
-          style={{padding: '0.7rem 1.2rem', borderRadius: '1.5rem', border: '1.5px solid #e0e0e0', fontSize: '1rem', width: '25%', marginRight: '1rem'}}
+          className="quantity-input"
         />
-        <button type="submit" style={{padding: '0.7rem 2rem', borderRadius: '1.5rem', background: '#2ecc40', color: '#fff', border: 'none', fontWeight: 600, fontSize: '1rem'}}>Add</button>
+        <button type="submit" className="add-button">Add</button>
       </form>
       {added.length > 0 && (
-        <div style={{marginTop: '1.5rem'}}>
-          <h3 style={{fontSize: '1.1rem', marginBottom: '0.7rem'}}>Your Ingredients</h3>
-          <ul style={{listStyle: 'none', padding: 0}}>
+        <div className="ingredients-list">
+          <h3 className="ingredients-title">Your Ingredients</h3>
+          <ul className="ingredients-ul">
             {added.map((item, idx) => (
-              <li key={idx} style={{marginBottom: '0.5rem', fontSize: '1.05rem'}}>
-                <span style={{fontWeight: 600}}>{item.name}</span>
-                {item.quantity && <span style={{color: '#888'}}> &nbsp;({item.quantity})</span>}
+              <li key={idx} className="ingredient-item">
+                <span className="ingredient-name">{item.name}</span>
+                {item.quantity && <span className="ingredient-quantity">({item.quantity})</span>}
               </li>
             ))}
           </ul>

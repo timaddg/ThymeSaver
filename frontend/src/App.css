@@ -6,14 +6,14 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #fff;
+  background: #F3E9FF;
   min-height: 100vh;
 }
 
 .App {
   min-height: 100vh;
   padding: 20px;
-  background: #fff;
+  background: #F3E9FF;
 }
 
 .container {
@@ -88,29 +88,50 @@ body {
   padding: 12px 24px;
   background: #667eea;
   color: white;
-  border: none;
+  border: 2px solid #5a6fd8;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+  min-width: 100px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover:not(:disabled) {
   background: #5a6fd8;
+  border-color: #4a5fc7;
+  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
 }
 
 .btn:disabled {
   background: #ccc;
+  border-color: #bbb;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .btn-danger {
   background: #dc3545;
+  border-color: #c82333;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
 .btn-danger:hover:not(:disabled) {
   background: #c82333;
+  border-color: #a71e2a;
+  box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4);
 }
 
 .ingredients-list {

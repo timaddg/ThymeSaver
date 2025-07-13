@@ -9,8 +9,8 @@ const Navbar: React.FC = () => {
 
   // Auth handler for modal
   const handleAuth = async (data: { username: string; email?: string; password: string }, mode: 'login' | 'signup') => {
-    const endpoint = mode === 'signup' ? '/api/signup' : '/api/login';
-    const payload = mode === 'signup' ? data : { username: data.username, password: data.password };
+    const endpoint = mode === 'signup' ? '/api/auth/register' : '/api/auth/login';
+    const payload = mode === 'signup' ? data : { email: data.email, password: data.password };
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

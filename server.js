@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
@@ -11,42 +12,124 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from React build
-app.use(express.static(path.join(__dirname, 'frontend/build')));
-
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// In-memory ingredient storage
+// Initialize PostgreSQL pool
+const pool = new Pool(); // uses .env for config
+
+// In-memory ingredient storage (fallback)
 const ingredients = [];
 
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+// --- API ROUTES ---
+
 // Add a new ingredient
-app.post('/api/ingredients', (req, res) => {
-  const { name, details } = req.body;
-  if (!name || typeof name !== 'string' || !name.trim()) {
-    return res.status(400).json({ error: 'Ingredient name is required and must be a non-empty string.' });
+app.post('/api/ingredients', async (req, res) => {
+  const { user_id, name, quantity } = req.body;
+  // If user_id is provided, use PostgreSQL
+  if (user_id) {
+    if (!user_id || !name) {
+      return res.status(400).json({ error: 'user_id and name are required' });
+    }
+    try {
+      const result = await pool.query(
+        'INSERT INTO ingredients (user_id, name, quantity) VALUES ($1, $2, $3) RETURNING *',
+        [user_id, name, quantity]
+      );
+      res.status(201).json({ success: true, ingredient: result.rows[0] });
+    } catch (err) {
+      console.error('Error inserting ingredient:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  } else {
+    // Fallback to in-memory storage
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return res.status(400).json({ error: 'Ingredient name is required and must be a non-empty string.' });
+    }
+    const ingredient = { id: ingredients.length + 1, name: name.trim(), details: quantity || '' };
+    ingredients.push(ingredient);
+    res.status(201).json({ success: true, ingredient });
   }
-  const ingredient = { id: ingredients.length + 1, name: name.trim(), details: details || '' };
-  ingredients.push(ingredient);
-  res.status(201).json({ success: true, ingredient });
 });
 
 // List all ingredients
-app.get('/api/ingredients', (req, res) => {
-  res.json({ success: true, ingredients });
+app.get('/api/ingredients', async (req, res) => {
+  const { user_id } = req.query;
+  if (user_id) {
+    try {
+      const result = await pool.query('SELECT * FROM ingredients WHERE user_id = $1', [user_id]);
+      res.json({ success: true, ingredients: result.rows });
+    } catch (err) {
+      console.error('Error fetching ingredients:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  } else {
+    res.json({ success: true, ingredients });
+  }
 });
 
 // Delete an ingredient
-app.delete('/api/ingredients/:id', (req, res) => {
+app.delete('/api/ingredients/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  const index = ingredients.findIndex(ingredient => ingredient.id === id);
-  
-  if (index === -1) {
-    return res.status(404).json({ error: 'Ingredient not found' });
+  const { user_id } = req.query;
+  if (user_id) {
+    try {
+      const result = await pool.query(
+        'DELETE FROM ingredients WHERE id = $1 AND user_id = $2 RETURNING *',
+        [id, user_id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Ingredient not found' });
+      }
+      res.json({ success: true, message: 'Ingredient deleted successfully' });
+    } catch (err) {
+      console.error('Error deleting ingredient:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  } else {
+    const index = ingredients.findIndex(ingredient => ingredient.id === id);
+    if (index === -1) {
+      return res.status(404).json({ error: 'Ingredient not found' });
+    }
+    ingredients.splice(index, 1);
+    res.json({ success: true, message: 'Ingredient deleted successfully' });
   }
-  
-  ingredients.splice(index, 1);
-  res.json({ success: true, message: 'Ingredient deleted successfully' });
+});
+
+// Add user directly (for admin or testing)
+app.post('/api/users', async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: 'Username, email, and password are required' });
+    }
+    // Check if user already exists
+    const existingUser = await pool.query(
+      'SELECT * FROM users WHERE email = $1 OR username = $2',
+      [email, username]
+    );
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+    // Hash password and create user
+    const bcrypt = require('bcrypt');
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await pool.query(
+      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
+      [username, email, hashedPassword]
+    );
+    res.status(201).json({ 
+      success: true, 
+      user: result.rows[0],
+      message: 'User added successfully' 
+    });
+  } catch (error) {
+    console.error('Add user error:', error);
+    res.status(500).json({ error: 'Failed to add user' });
+  }
 });
 
 // Health check endpoint
@@ -69,16 +152,13 @@ app.post('/api/generate-plan', async (req, res) => {
       ingredients: userIngredients = [],
       skillLevel = 'intermediate'
     } = req.body;
-
     // Use all stored ingredients if userIngredients is empty
     const allIngredients = userIngredients.length > 0
       ? userIngredients
       : ingredients.map(i => i.name);
-
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
-
     // Build the prompt for meal planning
     const prompt = `Generate a detailed meal plan with the following requirements:
 
@@ -98,12 +178,10 @@ Please provide:
 6. Any special tips or variations
 
 Format the response as a structured meal plan that's easy to read and follow.`;
-
     const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const result = await geminiModel.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-
     res.json({
       success: true,
       mealPlan: text,
@@ -117,7 +195,6 @@ Format the response as a structured meal plan that's easy to read and follow.`;
       },
       timestamp: new Date().toISOString()
     });
-
   } catch (error) {
     console.error('Meal Plan Generation Error:', error);
     res.status(500).json({ 
@@ -131,27 +208,22 @@ Format the response as a structured meal plan that's easy to read and follow.`;
 app.post('/api/chat', async (req, res) => {
   try {
     const { message, model = 'gemini-pro' } = req.body;
-    
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
     }
-
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
-
     const geminiModel = genAI.getGenerativeModel({ model: model === 'gemini-pro' ? 'gemini-1.5-flash' : model });
     const result = await geminiModel.generateContent(message);
     const response = await result.response;
     const text = response.text();
-
     res.json({
       success: true,
       response: text,
       model: model,
       timestamp: new Date().toISOString()
     });
-
   } catch (error) {
     console.error('Gemini API Error:', error);
     res.status(500).json({ 
@@ -160,6 +232,84 @@ app.post('/api/chat', async (req, res) => {
     });
   }
 });
+
+// Authentication endpoints
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: 'Username, email, and password are required' });
+    }
+    // Check if user already exists
+    const existingUser = await pool.query(
+      'SELECT * FROM users WHERE email = $1 OR username = $2',
+      [email, username]
+    );
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+    // Hash password and create user
+    const bcrypt = require('bcrypt');
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await pool.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
+      [username, email, hashedPassword]
+    );
+    res.status(201).json({ 
+      success: true, 
+      user: result.rows[0],
+      message: 'User registered successfully' 
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Registration failed' });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+    // Find user
+    const result = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const user = result.rows[0];
+    // Verify password
+    const bcrypt = require('bcrypt');
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    // Generate JWT token
+    const jwt = require('jsonwebtoken');
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '24h' }
+    );
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// --- END API ROUTES ---
 
 // Catch-all handler: send back React's index.html file for any non-API routes
 app.get('*', (req, res) => {
@@ -175,27 +325,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 ThymeSaver server running on http://localhost:${PORT}`);
   console.log(`📱 Frontend and API served from single port`);
-});
-
-const { Pool } = require('pg');
-require('dotenv').config();
-
-const pool = new Pool(); // uses .env for config
-
-// Add this route to your Express app:
-app.post('/api/ingredients', async (req, res) => {
-  const { user_id, name, quantity } = req.body;
-  if (!user_id || !name) {
-    return res.status(400).json({ error: 'user_id and name are required' });
-  }
-  try {
-    const result = await pool.query(
-      'INSERT INTO ingredients (user_id, name, quantity) VALUES ($1, $2, $3) RETURNING *',
-      [user_id, name, quantity]
-    );
-    res.status(201).json({ success: true, ingredient: result.rows[0] });
-  } catch (err) {
-    console.error('Error inserting ingredient:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+}); 

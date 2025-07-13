@@ -2,47 +2,50 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2.5rem 1.5rem 2.5rem;
+  padding: 1.5rem 3.5rem 1.5rem 2.5rem;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   border-radius: 0 0 1.5rem 1.5rem;
   margin-bottom: 0.5rem;
+  box-shadow: none;
+  border-bottom: 1px solid #ececec;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #1a3d1a;
-}
-
-.logo-leaf {
-  font-size: 2rem;
-  margin-right: 0.4rem;
+  letter-spacing: 0.5px;
 }
 
 .logo-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
   font-weight: 700;
   letter-spacing: 1px;
+  color: #111;
 }
 
 .navbar-menu {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
   list-style: none;
   font-size: 1.1rem;
   color: #222;
   font-weight: 500;
+  margin-right: 2rem;
 }
 
 .navbar-menu li {
   cursor: pointer;
   transition: color 0.2s;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
 }
 
 .navbar-menu li:hover {
+  background: #f3e9ff;
   color: #2ecc40;
 }
 
@@ -51,35 +54,38 @@
   gap: 1rem;
 }
 
-.btn-outline {
-  background: transparent;
-  border: 2px solid #2ecc40;
-  color: #2ecc40;
-  border-radius: 1.5rem;
-  padding: 0.5rem 1.3rem;
-  font-weight: 600;
+.btn-outline, .btn-solid {
+  font-family: inherit;
   font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  min-width: 120px;
+  height: 44px;
+  box-shadow: none;
+  border: 1.5px solid #e0e0e0;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.btn-outline {
+  background: #fff;
+  color: #2ecc40;
+  border: 1.5px solid #2ecc40;
 }
 
 .btn-outline:hover {
-  background: #2ecc40;
-  color: #fff;
+  background: #f3e9ff;
+  color: #229954;
+  border-color: #229954;
 }
 
 .btn-solid {
   background: #2ecc40;
   color: #fff;
-  border: none;
-  border-radius: 1.5rem;
-  padding: 0.5rem 1.3rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
+  border: 1.5px solid #2ecc40;
 }
 
 .btn-solid:hover {
-  background: #27ae38;
+  background: #229954;
+  border-color: #229954;
 } 
