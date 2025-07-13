@@ -187,3 +187,26 @@ app.listen(PORT, () => {
   console.log(`🚀 ThymeSaver API server running on http://localhost:${PORT}`);
   console.log(`📝 Frontend should be running on http://localhost:3001`);
 }); 
+
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool(); // uses .env for config
+
+// Add this route to your Express app:
+app.post('/api/ingredients', async (req, res) => {
+  const { user_id, name, quantity } = req.body;
+  if (!user_id || !name) {
+    return res.status(400).json({ error: 'user_id and name are required' });
+  }
+  try {
+    const result = await pool.query(
+      'INSERT INTO ingredients (user_id, name, quantity) VALUES ($1, $2, $3) RETURNING *',
+      [user_id, name, quantity]
+    );
+    res.status(201).json({ success: true, ingredient: result.rows[0] });
+  } catch (err) {
+    console.error('Error inserting ingredient:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});

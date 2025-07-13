@@ -18,11 +18,8 @@ export const ingredientApi = {
   },
 
   // Add a new ingredient
-  add: async (ingredient: { name: string; details?: string }): Promise<Ingredient> => {
-    const response = await api.post<ApiResponse>('/ingredients', ingredient);
-    if (!response.data.ingredient) {
-      throw new Error(response.data.error || 'Failed to add ingredient');
-    }
+  add: async (ingredient: { user_id: number; name: string; quantity?: string }) => {
+    const response = await axios.post('/api/ingredients', ingredient);
     return response.data.ingredient;
   },
 

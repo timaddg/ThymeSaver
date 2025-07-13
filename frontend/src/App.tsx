@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
-import RecipeGrid from './components/RecipeGrid';
+import IngredientSection from './components/IngredientSection';
 import './App.css';
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Navbar />
       <HeroSection />
-      <RecipeGrid />
+      <IngredientSection />
     </div>
   );
 }
