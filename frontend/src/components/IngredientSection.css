@@ -126,14 +126,14 @@
 .add-button {
   padding: 0.7rem 2rem;
   border-radius: 1.5rem;
-  background: #2ecc40;
+  background: #111;
   color: #fff;
-  border: 2px solid #27ae38;
+  border: 2px solid #111;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(46, 204, 64, 0.3);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
   min-width: 100px;
   height: 44px;
   display: inline-flex;
@@ -142,15 +142,15 @@
 }
 
 .add-button:hover {
-  background: #27ae38;
-  border-color: #229954;
-  box-shadow: 0 6px 12px rgba(46, 204, 64, 0.4);
+  background: #333;
+  border-color: #111;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.13);
   transform: translateY(-1px);
 }
 
 .add-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(46, 204, 64, 0.3);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
 .suggestions-list {

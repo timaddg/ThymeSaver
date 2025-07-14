@@ -118,7 +118,7 @@ app.post('/api/users', async (req, res) => {
     const bcrypt = require('bcrypt');
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
-      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
       [username, email, hashedPassword]
     );
     res.status(201).json({ 
