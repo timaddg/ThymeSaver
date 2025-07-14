@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './HeroSection.css';
 import heroImg from '../assets/hero-bowl.jpg'; // You should add a food image to this path
 
@@ -9,14 +9,30 @@ interface HeroSectionProps {
 
 const USER_ID = 1; // Replace with actual user id from auth/session if available
 
+function parseDishes(response: string) {
+  // Simple parser: expects each dish to start with a number or bullet
+  // and main ingredients to be listed after 'Main ingredients:' or similar
+  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\n-?\s*Main ingredients?:?\s*([^\n]+)/gi;
+  const matches = Array.from(response.matchAll(dishRegex));
+  if (matches.length === 0) return null;
+  return matches.map((m) => ({
+    name: m[1].trim(),
+    description: m[2].trim(),
+    ingredients: m[3].split(',').map((i) => i.trim()),
+  }));
+}
+
 const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedDish, setSelectedDish] = useState<number | null>(null);
+  const [confirmation, setConfirmation] = useState<string | null>(null);
 
   const handleAskGemini = async () => {
     setLoading(true);
     setError(null);
     setMealPlan(null);
+    setSelectedDish(null);
     try {
       // 1. Fetch ingredients for the user
       const ingRes = await fetch(`/api/ingredients?user_id=${USER_ID}`);
@@ -40,6 +56,29 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
     }
   };
 
+  const handleCookThis = async (idx: number, dish: any) => {
+    setSelectedDish(idx);
+    setConfirmation(null);
+    try {
+      const res = await fetch('/api/ingredients/remove', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: USER_ID, ingredients: dish.ingredients }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setConfirmation('Grocery items updated');
+        // Optionally, you could refresh the ingredient list here
+      } else {
+        setConfirmation('Failed to update grocery items');
+      }
+    } catch (err) {
+      setConfirmation('Failed to update grocery items');
+    }
+  };
+
+  let dishes = mealPlan ? parseDishes(mealPlan.replace(/\*\*/g, '')) : null;
+
   return (
     <section className="hero-section">
       <div className="hero-left">
@@ -60,7 +99,34 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
               <span className="gemini-response-date">{new Date().toLocaleString()}</span>
             </div>
             <div className="gemini-response-body">
-              {mealPlan.replace(/\*\*/g, '')}
+              {confirmation && (
+                <div className="grocery-confirmation">{confirmation}</div>
+              )}
+              {dishes ? (
+                <div className="dish-cards-container">
+                  {dishes.map((dish, idx) => (
+                    <div
+                      key={idx}
+                      className={`dish-card${selectedDish === idx ? ' selected' : ''}`}
+                    >
+                      <div className="dish-card-title">{dish.name}</div>
+                      <div className="dish-card-desc">{dish.description}</div>
+                      <div className="dish-card-ingredients">
+                        <span>Main ingredients:</span> {dish.ingredients.join(', ')}
+                      </div>
+                      <button
+                        className="cook-this-btn"
+                        onClick={() => handleCookThis(idx, dish)}
+                        disabled={selectedDish !== null && selectedDish !== idx}
+                      >
+                        {selectedDish === idx ? 'Selected' : 'Cook This'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                mealPlan.replace(/\*\*/g, '')
+              )}
             </div>
             <div className="gemini-response-footer">
               <a href="#" className="gemini-response-link">View Details</a>

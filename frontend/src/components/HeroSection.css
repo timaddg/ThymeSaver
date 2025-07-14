@@ -159,6 +159,80 @@
   text-decoration: underline;
 }
 
+.dish-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.dish-card {
+  background: #f8fafc;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 1.2rem 1.5rem 1.1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 2px solid transparent;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+.dish-card.selected {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+}
+.dish-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.2rem;
+}
+.dish-card-desc {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 0.2rem;
+}
+.dish-card-ingredients {
+  font-size: 0.98rem;
+  color: #555;
+  margin-bottom: 0.4rem;
+}
+.cook-this-btn {
+  align-self: flex-end;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.cook-this-btn:hover:not(:disabled) {
+  background: #2563eb;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+}
+.cook-this-btn:disabled {
+  background: #e5e7eb;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.grocery-confirmation {
+  background: #e0f7fa;
+  color: #00796b;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 1.05rem;
+}
+
 @media (max-width: 900px) {
   .hero-section {
     flex-direction: column;

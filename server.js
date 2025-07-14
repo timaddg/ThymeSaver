@@ -99,6 +99,24 @@ app.delete('/api/ingredients/:id', async (req, res) => {
   }
 });
 
+// Remove multiple ingredients for a user
+app.post('/api/ingredients/remove', async (req, res) => {
+  const { user_id, ingredients } = req.body;
+  if (!user_id || !Array.isArray(ingredients) || ingredients.length === 0) {
+    return res.status(400).json({ error: 'user_id and ingredients array are required' });
+  }
+  try {
+    const result = await pool.query(
+      'DELETE FROM ingredients WHERE user_id = $1 AND name = ANY($2::text[])',
+      [user_id, ingredients]
+    );
+    res.json({ success: true, removed: result.rowCount });
+  } catch (err) {
+    console.error('Error removing ingredients:', err);
+    res.status(500).json({ error: 'Failed to remove ingredients' });
+  }
+});
+
 // Add user directly (for admin or testing)
 app.post('/api/users', async (req, res) => {
   try {
