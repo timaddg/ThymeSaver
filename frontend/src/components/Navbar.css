@@ -1,40 +1,32 @@
 .navbar {
+  width: 100vw;
+  min-width: 100vw;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 3.5rem 1.5rem 2.5rem;
-  background: #fff;
-  border-radius: 0 0 1.5rem 1.5rem;
-  margin-bottom: 0.5rem;
-  box-shadow: none;
-  border-bottom: 1px solid #ececec;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  padding: 0 2.5rem;
+  z-index: 100;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #1a3d1a;
-  letter-spacing: 0.5px;
-}
-
-.logo-text {
-  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #111;
 }
 
 .navbar-menu {
   display: flex;
-  gap: 2.5rem;
+  align-items: center;
+  gap: 2rem;
   list-style: none;
-  font-size: 1.1rem;
-  color: #222;
-  font-weight: 500;
-  margin-right: 2rem;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar-menu li {
@@ -51,6 +43,7 @@
 
 .navbar-actions {
   display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -145,4 +138,27 @@
 
 .dropdown-item:hover {
   background: #f3e9ff;
+}
+
+.logo-text {
+  font-family: 'Lato', 'Montserrat', 'Open Sans', 'Poppins';
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 1.5px;
+  color: #111;
+  text-transform: uppercase;
+  background: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 1rem;
+    height: 60px;
+  }
+  .navbar-menu {
+    gap: 1rem;
+  }
 } 

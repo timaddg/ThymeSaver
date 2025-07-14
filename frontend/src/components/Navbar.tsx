@@ -46,13 +46,13 @@ const Navbar: React.FC = () => {
         <div className="navbar-logo">
           <span className="logo-text">ThymeSaver</span>
         </div>
-        <ul className="navbar-menu">
-          <li>Home</li>
-          <li>Meals</li>
-          <li>Grocery</li>
-        </ul>
-        <div className="navbar-actions">
-          {user ? (
+        {user ? (
+          <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+            <ul className="navbar-menu" style={{ margin: 0, marginRight: '1.5rem' }}>
+              <li>Home</li>
+              <li>Meals</li>
+              <li>Grocery</li>
+            </ul>
             <div className="user-dropdown-container" ref={dropdownRef}>
               <button
                 className="user-icon-btn"
@@ -81,13 +81,20 @@ const Navbar: React.FC = () => {
                 </div>
               )}
             </div>
-          ) : (
-            <>
+          </div>
+        ) : (
+          <>
+            <ul className="navbar-menu">
+              <li>Home</li>
+              <li>Meals</li>
+              <li>Grocery</li>
+            </ul>
+            <div className="navbar-actions">
               <button className="btn-outline" onClick={() => setShowAuthModal('signup')}>Sign Up</button>
               <button className="btn-solid" onClick={() => setShowAuthModal('login')}>Login</button>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </nav>
       {showAuthModal && (
         <AuthModal

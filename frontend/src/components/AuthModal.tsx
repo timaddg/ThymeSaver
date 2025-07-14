@@ -35,23 +35,26 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode: initialMode, onClose, onAut
         <button className="auth-modal-close" onClick={onClose}>&times;</button>
         <h2>{mode === 'signup' ? 'Sign Up' : 'Login'}</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            required
-            autoFocus
-          />
-          {mode === 'signup' && (
+          {mode === 'signup' ? (
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
+              autoFocus
+            />
+          ) : null}
+          {mode === 'login' || mode === 'signup' ? (
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
+              autoFocus={mode === 'login'}
             />
-          )}
+          ) : null}
           <input
             type="password"
             placeholder="Password"
