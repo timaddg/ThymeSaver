@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './HeroSection.css';
 import heroImg from '../assets/hero-bowl.jpg'; // You should add a food image to this path
 
+interface HeroSectionProps {
+  mealPlan: string | null;
+  setMealPlan: (plan: string | null) => void;
+}
+
 const USER_ID = 1; // Replace with actual user id from auth/session if available
 
-const HeroSection: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [mealPlan, setMealPlan] = useState<string | null>(null);
+const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const handleAskGemini = async () => {
     setLoading(true);
@@ -50,18 +54,17 @@ const HeroSection: React.FC = () => {
         </div>
         {error && <div style={{ color: '#dc3545', marginTop: 16 }}>{error}</div>}
         {mealPlan && (
-          <div style={{
-            background: '#f8f9fa',
-            borderRadius: 12,
-            padding: '1.5rem',
-            marginTop: 24,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-            whiteSpace: 'pre-line',
-            fontSize: '1.08rem',
-            color: '#222',
-            maxWidth: 520
-          }}>
-            {mealPlan}
+          <div className="gemini-response-card">
+            <div className="gemini-response-header">
+              <span className="gemini-response-title">Gemini Suggestions</span>
+              <span className="gemini-response-date">{new Date().toLocaleString()}</span>
+            </div>
+            <div className="gemini-response-body">
+              {mealPlan.replace(/\*\*/g, '')}
+            </div>
+            <div className="gemini-response-footer">
+              <a href="#" className="gemini-response-link">View Details</a>
+            </div>
           </div>
         )}
       </div>

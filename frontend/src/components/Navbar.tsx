@@ -3,7 +3,11 @@ import './Navbar.css';
 import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  hideLogo?: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
   const { user, logout, login } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState<null | 'login' | 'signup'>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -43,9 +47,11 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav className="navbar">
-        <div className="navbar-logo">
-          <span className="logo-text">ThymeSaver</span>
-        </div>
+        {!hideLogo && (
+          <div className="navbar-logo">
+            <span className="logo-text">ThymeSaver</span>
+          </div>
+        )}
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
             <ul className="navbar-menu" style={{ margin: 0, marginRight: '1.5rem' }}>
