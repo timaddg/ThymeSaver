@@ -33,7 +33,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode: initialMode, onClose, onAut
     <div className="auth-modal-backdrop">
       <div className="auth-modal">
         <button className="auth-modal-close" onClick={onClose}>&times;</button>
-        <h2>{mode === 'signup' ? 'Sign Up' : 'Login'}</h2>
+        <h2>{mode === 'signup' ? 'Create your account' : 'Welcome back!'}</h2>
+        <div className="auth-modal-subtext">
+          {mode === 'signup'
+            ? 'Sign up to save your favorite recipes, ingredients, and meal plans.'
+            : 'Sign in to access your personalized cooking experience.'}
+        </div>
         <form onSubmit={handleSubmit}>
           {mode === 'signup' ? (
           <input
@@ -64,7 +69,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode: initialMode, onClose, onAut
           />
           {error && <div className="auth-modal-error">{error}</div>}
           <button type="submit" className="auth-modal-btn" disabled={loading}>
-            {loading ? (mode === 'signup' ? 'Signing Up...' : 'Logging In...') : (mode === 'signup' ? 'Sign Up' : 'Login')}
+            {loading ? (mode === 'signup' ? 'Signing Up...' : 'Logging In...') : (mode === 'signup' ? 'Sign Up' : 'Log In')}
           </button>
         </form>
         <div className="auth-modal-switch">
