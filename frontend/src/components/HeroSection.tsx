@@ -83,8 +83,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
     <section className="hero-section hero-redesign">
       <div className="hero-bg-image" />
       <div className="hero-content">
-        <h1 className="hero-title">Effortless home cooking, delivered.</h1>
-        <button className="hero-cta-btn">Browse Meal Kits</button>
+        <h1 className="hero-title">Cooking choices made easy</h1>
+        <button className="hero-cta-btn">Ask Gemini</button>
       </div>
     </section>
   );

@@ -45,6 +45,7 @@
 }
 .nav-link:hover, .grocery-link:hover {
   color: var(--accent);
+  text-decoration: none;
 }
 
 .navbar-actions {
@@ -53,10 +54,14 @@
   gap: 1.2rem;
 }
 
+.btn-outline, .btn-solid {
+  font-family: 'Base Neue', 'BaseNeueTrial-Bold', Arial, sans-serif;
+  font-weight: 700;
+}
 .btn-outline {
   background: none;
-  border: 2px solid var(--accent);
-  color: var(--accent);
+  border: 2px solid #ff9800;
+  color: #ff9800;
   border-radius: 2rem;
   padding: 0.5rem 1.5rem;
   font-size: 1rem;
@@ -65,12 +70,11 @@
   transition: background 0.15s, color 0.15s;
 }
 .btn-outline:hover {
-  background: var(--accent);
+  background: #ff9800;
   color: #fff;
 }
-
 .btn-solid {
-  background: var(--accent);
+  background: #ff9800;
   color: #fff;
   border: none;
   border-radius: 2rem;
@@ -81,7 +85,7 @@
   transition: background 0.15s;
 }
 .btn-solid:hover {
-  background: var(--accent-hover);
+  background: #e67c00;
 }
 
 .user-icon-btn, .cart-icon-btn, .search-icon-btn {
