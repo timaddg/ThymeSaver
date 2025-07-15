@@ -80,62 +80,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
   let dishes = mealPlan ? parseDishes(mealPlan.replace(/\*\*/g, '')) : null;
 
   return (
-    <section className="hero-section">
-      <div className="hero-left">
-        <h1 className="hero-title">What would you like to cook Today ?</h1>
-        <p className="hero-subtitle">
-          Ask AI to simplify your cooking today
-        </p>
-        <div className="hero-cta">
-          <button className="hero-btn-primary" onClick={handleAskGemini} disabled={loading}>
-            {loading ? 'Asking Gemini...' : 'Ask Gemini'}
-          </button>
-        </div>
-        {error && <div style={{ color: '#dc3545', marginTop: 16 }}>{error}</div>}
-        {mealPlan && (
-          <div className="gemini-response-card">
-            <div className="gemini-response-header">
-              <span className="gemini-response-title">Gemini Suggestions</span>
-              <span className="gemini-response-date">{new Date().toLocaleString()}</span>
-            </div>
-            <div className="gemini-response-body">
-              {confirmation && (
-                <div className="grocery-confirmation">{confirmation}</div>
-              )}
-              {dishes ? (
-                <div className="dish-cards-container">
-                  {dishes.map((dish, idx) => (
-                    <div
-                      key={idx}
-                      className={`dish-card${selectedDish === idx ? ' selected' : ''}`}
-                    >
-                      <div className="dish-card-title">{dish.name}</div>
-                      <div className="dish-card-desc">{dish.description}</div>
-                      <div className="dish-card-ingredients">
-                        <span>Main ingredients:</span> {dish.ingredients.join(', ')}
-                      </div>
-                      <button
-                        className="cook-this-btn"
-                        onClick={() => handleCookThis(idx, dish)}
-                        disabled={selectedDish !== null && selectedDish !== idx}
-                      >
-                        {selectedDish === idx ? 'Selected' : 'Cook This'}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                mealPlan.replace(/\*\*/g, '')
-              )}
-            </div>
-            <div className="gemini-response-footer">
-              <button type="button" className="gemini-response-link">View Details</button>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="hero-right">
-        <img src={heroImg} alt="Healthy Bowl" className="hero-img" />
+    <section className="hero-section hero-redesign">
+      <div className="hero-bg-image" />
+      <div className="hero-content">
+        <h1 className="hero-title">Effortless home cooking, delivered.</h1>
+        <button className="hero-cta-btn">Browse Meal Kits</button>
       </div>
     </section>
   );

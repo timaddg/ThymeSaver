@@ -2,6 +2,9 @@ html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Base Neue', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f8f8f6;
+  color: #222;
 }
 
 @font-face {
@@ -53,23 +56,14 @@ html, body {
 }
 
 :root {
-  --color-primary: #008060; /* Shopify green */
-  --color-primary-dark: #005c46;
-  --color-primary-light: #e6f5f0;
-  --color-bg: #fff;
-  --color-bg-alt: #f6f6f7;
-  --color-border: #e1e3e5;
-  --color-text: #111;
-  --color-text-light: #555;
-  --color-accent: #36fba1;
-  --radius-lg: 18px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-  --shadow-card: 0 2px 12px rgba(0,0,0,0.08);
-  --shadow-hover: 0 4px 16px rgba(0,128,96,0.13);
-  --font-heading: 'Base Neue', 'Lato', 'Montserrat', Arial, sans-serif;
-  --font-body: 'Lato', 'Montserrat', Arial, sans-serif;
-  --transition: 0.18s cubic-bezier(.4,0,.2,1);
+  --primary-bg: #fff;
+  --section-bg: #f8f8f6;
+  --accent: #F7931E;
+  --accent-hover: #e67c00;
+  --text-dark: #222;
+  --text-light: #666;
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --border-radius: 18px;
 }
 
 body {
