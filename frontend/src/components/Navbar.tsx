@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Navbar.css';
 import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
+import { ingredientApi } from '../services/api';
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
   hideLogo?: boolean;
@@ -55,9 +57,13 @@ const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
             <ul className="navbar-menu" style={{ margin: 0, marginRight: '1.5rem' }}>
-              <li>Home</li>
+              <li>
+                <Link to="/" className="nav-link">Home</Link>
+              </li>
               <li>Meals</li>
-              <li>Grocery</li>
+              <li>
+                <Link to="/grocery" className="grocery-link">Grocery</Link>
+              </li>
             </ul>
             <div className="user-dropdown-container" ref={dropdownRef}>
               <button

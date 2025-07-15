@@ -3,17 +3,28 @@ import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import IngredientSection from './components/IngredientSection';
 import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import GroceryPage from './components/GroceryPage';
 import './App.css';
 
 function App() {
   const [mealPlan, setMealPlan] = useState<string | null>(null);
   return (
     <AuthProvider>
-      <div className="App">
-        <Navbar hideLogo={!!mealPlan} />
-        <HeroSection mealPlan={mealPlan} setMealPlan={setMealPlan} />
-        <IngredientSection />
-      </div>
+      <Router>
+        <div className="App">
+          <Navbar hideLogo={!!mealPlan} />
+          <Routes>
+            <Route path="/grocery" element={<GroceryPage />} />
+            <Route path="/" element={
+              <>
+                <HeroSection mealPlan={mealPlan} setMealPlan={setMealPlan} />
+                <IngredientSection />
+              </>
+            } />
+          </Routes>
+        </div>
+      </Router>
     </AuthProvider>
   );
 }
