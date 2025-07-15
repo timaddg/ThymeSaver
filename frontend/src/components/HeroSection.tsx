@@ -129,7 +129,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
               )}
             </div>
             <div className="gemini-response-footer">
-              <a href="#" className="gemini-response-link">View Details</a>
+              <button type="button" className="gemini-response-link">View Details</button>
             </div>
           </div>
         )}

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { setLogoutHandler } from '../services/api';
 
 interface User {
   id: number;
@@ -31,16 +32,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null);
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
+    window.location.href = '/';
   };
 
-  // Load from localStorage on mount
+  // Always clear auth state on mount (app start)
   React.useEffect(() => {
-    const storedToken = localStorage.getItem('auth_token');
-    const storedUser = localStorage.getItem('auth_user');
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_user');
+    // Register logout handler for 401 auto-logout
+    setLogoutHandler(logout);
   }, []);
 
   return (

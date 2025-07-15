@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Navbar.css';
 import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
-import { ingredientApi } from '../services/api';
 import { Link } from 'react-router-dom';
 
 interface NavbarProps {

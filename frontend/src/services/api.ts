@@ -10,6 +10,23 @@ const api = axios.create({
   },
 });
 
+// Handler to be set by AuthContext for logging out
+let logoutHandler: (() => void) | null = null;
+export function setLogoutHandler(handler: () => void) {
+  logoutHandler = handler;
+}
+
+// Add a response interceptor
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      if (logoutHandler) logoutHandler();
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const ingredientApi = {
   // Get all ingredients
   getAll: async (): Promise<Ingredient[]> => {

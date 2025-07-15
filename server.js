@@ -187,23 +187,28 @@ app.post('/api/generate-plan', async (req, res) => {
 Available Ingredients: ${allIngredients.join(', ') || 'None'}
 
 You do not have to use all the ingredients in each dish. Only suggest dishes that can reasonably be made with the provided ingredients. List the dishes in order from least time needed to most time needed.`;
-    const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await geminiModel.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    res.json({
-      success: true,
-      mealPlan: text,
-      parameters: {
-        dietaryRestrictions,
-        cuisinePreferences,
-        cookingTime,
-        servings,
-        ingredients: allIngredients,
-        skillLevel
-      },
-      timestamp: new Date().toISOString()
-    });
+    try {
+      const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const result = await geminiModel.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      res.json({
+        success: true,
+        mealPlan: text,
+        parameters: {
+          dietaryRestrictions,
+          cuisinePreferences,
+          cookingTime,
+          servings,
+          ingredients: allIngredients,
+          skillLevel
+        },
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Gemini API error (generate-plan):', error);
+      res.status(500).json({ error: 'Failed to generate meal plan', details: error.message });
+    }
   } catch (error) {
     console.error('Meal Plan Generation Error:', error);
     res.status(500).json({ 
@@ -223,16 +228,21 @@ app.post('/api/chat', async (req, res) => {
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
-    const geminiModel = genAI.getGenerativeModel({ model: model === 'gemini-pro' ? 'gemini-1.5-flash' : model });
-    const result = await geminiModel.generateContent(message);
-    const response = await result.response;
-    const text = response.text();
-    res.json({
-      success: true,
-      response: text,
-      model: model,
-      timestamp: new Date().toISOString()
-    });
+    try {
+      const geminiModel = genAI.getGenerativeModel({ model: model === 'gemini-pro' ? 'gemini-1.5-flash' : model });
+      const result = await geminiModel.generateContent(message);
+      const response = await result.response;
+      const text = response.text();
+      res.json({
+        success: true,
+        response: text,
+        model: model,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Gemini API error (chat):', error);
+      res.status(500).json({ error: 'Failed to generate response', details: error.message });
+    }
   } catch (error) {
     console.error('Gemini API Error:', error);
     res.status(500).json({ 
