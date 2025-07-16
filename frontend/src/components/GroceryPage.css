@@ -1,81 +1,144 @@
-.grocery-page-container {
-  max-width: 600px;
-  margin: 2.5rem auto 0 auto;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  padding: 2.5rem 2rem 2rem 2rem;
-  min-height: 340px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.grocery-page-root {
+  padding: 2.5rem 2rem;
+  background: #f8f8f6;
+  font-family: 'Base Neue', Arial, sans-serif;
 }
-.grocery-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.grocery-page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #25603e;
   margin-bottom: 2rem;
 }
-.grocery-icon {
-  font-size: 2.2rem;
+.grocery-page-message {
+  background: #e0f7fa;
+  color: #00796b;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 1.05rem;
 }
-.grocery-header h2 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #222;
-  margin: 0;
-  letter-spacing: 1px;
+.grocery-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
 }
-.grocery-loading {
-  color: #888;
-  font-size: 1.1rem;
-  margin-top: 2rem;
-}
-.grocery-empty-state {
+.grocery-product-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
+  gap: 0.7rem;
+  font-family: 'Base Neue', Arial, sans-serif;
+  transition: box-shadow 0.15s;
+  position: relative;
 }
-.grocery-empty-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.7rem;
+.grocery-product-card:hover {
+  box-shadow: 0 4px 18px rgba(247,147,30,0.13);
 }
-.grocery-empty-text {
+.grocery-product-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 1rem;
+  margin-bottom: 0.5rem;
+}
+.grocery-product-tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #ffe0b2;
+  color: #ff9800;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 1rem;
+  padding: 0.2rem 0.8rem;
+}
+.grocery-product-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.2rem;
+  text-align: center;
+}
+.grocery-product-price {
+  font-size: 1.2rem;
+  color: #b12704;
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+}
+.grocery-product-size {
+  font-size: 0.98rem;
+  color: #666;
+  margin-bottom: 0.2rem;
+}
+.grocery-product-rating {
+  font-size: 1rem;
+  color: #388e3c;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.grocery-product-rating-count {
   color: #888;
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin-left: 0.3rem;
 }
-.grocery-list-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-  justify-content: center;
-  width: 100%;
-}
-.grocery-card {
-  background: #f8fafc;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  padding: 1.1rem 1.7rem;
+.grocery-product-qty {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  font-size: 1.08rem;
-  font-weight: 600;
-  color: #2563eb;
-  min-width: 120px;
-  transition: box-shadow 0.15s, background 0.15s;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
 }
-.grocery-card-icon {
-  font-size: 1.3rem;
+.grocery-product-qty button {
+  background: #f3f3f3;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  color: #25603e;
+  transition: background 0.13s;
 }
-.grocery-card-name {
-  color: #222;
-  font-weight: 600;
-  font-size: 1.08rem;
+.grocery-product-qty button:hover {
+  background: #e0e0e0;
 }
-.grocery-card:hover {
-  background: #e0f2fe;
-  box-shadow: 0 4px 16px rgba(37,99,235,0.13);
+.grocery-product-btn {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.7rem 1.7rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: 'Base Neue', Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(247,147,30,0.13);
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  margin-top: 0.7rem;
+}
+.grocery-product-btn:hover {
+  background: #e67c00;
+  box-shadow: 0 4px 18px rgba(247,147,30,0.18);
+}
+@media (max-width: 900px) {
+  .grocery-product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.2rem;
+  }
+  .grocery-product-card {
+    min-width: 140px;
+    max-width: 100%;
+  }
+  .grocery-product-img {
+    width: 70px;
+    height: 70px;
+  }
 } 

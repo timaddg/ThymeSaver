@@ -9,7 +9,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, login } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState<null | 'login' | 'signup'>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,9 +43,9 @@ const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
     });
     const result = await res.json();
     if (!result.success) throw new Error(result.error || 'Authentication failed');
-    // The original code had login(result.user, result.token); here, but login is not imported.
-    // Assuming the intent was to handle login/signup directly or that login is meant to be added.
-    // For now, removing the line as per the new_code's structure.
+    if (result.user && result.token) {
+      login(result.user, result.token);
+    }
   };
 
   return (
@@ -94,7 +94,7 @@ const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
         <AuthModal
           mode={showAuthModal}
           onClose={() => setShowAuthModal(null)}
-          onAuth={async () => { setShowAuthModal(null); return Promise.resolve(); }}
+          onAuth={handleAuth}
         />
       )}
     </nav>
