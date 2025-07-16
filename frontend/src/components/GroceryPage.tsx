@@ -8,32 +8,41 @@ import mushroomImg from '../assets/mushroom.jpg';
 const PLACEHOLDER_IMG = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80';
 
 const PRODUCT_INGREDIENTS = [
-  { id: 1, name: 'Lemon Herb Salmon', price: 6.99, image: salmonImg, tag: 'Gluten-Free', size: '12 oz', rating: 153, stars: 5 },
-  { id: 2, name: 'Spicy Chicken Tacos', price: 4.99, image: chickenTacosImg, tag: 'Gluten-Free', size: '8 oz', rating: 244, stars: 5 },
-  { id: 3, name: 'Mushroom Risotto', price: 5.49, image: mushroomImg, tag: 'Gluten-Free', size: '10 oz', rating: 121, stars: 5 },
-  { id: 4, name: 'Onion', price: 0.99, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '1 lb', rating: 200, stars: 5 },
-  { id: 5, name: 'Tomato', price: 1.29, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '1 lb', rating: 180, stars: 5 },
-  { id: 6, name: 'Potato', price: 0.89, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '1 lb', rating: 170, stars: 5 },
-  { id: 7, name: 'Garlic', price: 1.19, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '3 oz', rating: 160, stars: 5 },
-  { id: 8, name: 'Carrot', price: 1.09, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '1 lb', rating: 150, stars: 5 },
-  { id: 9, name: 'Spinach', price: 2.49, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '8 oz', rating: 140, stars: 5 },
-  { id: 10, name: 'Broccoli', price: 2.29, image: PLACEHOLDER_IMG, tag: 'Vegetable', size: '1 lb', rating: 130, stars: 5 },
-  { id: 11, name: 'Chicken Breast', price: 5.99, image: PLACEHOLDER_IMG, tag: 'Meat', size: '1 lb', rating: 120, stars: 5 },
-  { id: 12, name: 'Eggs', price: 2.99, image: PLACEHOLDER_IMG, tag: 'Dairy', size: '12 ct', rating: 110, stars: 5 },
-  { id: 13, name: 'Milk', price: 3.49, image: PLACEHOLDER_IMG, tag: 'Dairy', size: '1 gal', rating: 100, stars: 5 },
-  { id: 14, name: 'Cheese', price: 4.49, image: PLACEHOLDER_IMG, tag: 'Dairy', size: '8 oz', rating: 90, stars: 5 },
-  { id: 15, name: 'Rice', price: 2.99, image: PLACEHOLDER_IMG, tag: 'Grain', size: '2 lb', rating: 80, stars: 5 },
-  { id: 16, name: 'Pasta', price: 1.99, image: PLACEHOLDER_IMG, tag: 'Grain', size: '1 lb', rating: 70, stars: 5 },
-  { id: 17, name: 'Beef', price: 7.99, image: PLACEHOLDER_IMG, tag: 'Meat', size: '1 lb', rating: 60, stars: 5 },
-  { id: 18, name: 'Pork', price: 6.99, image: PLACEHOLDER_IMG, tag: 'Meat', size: '1 lb', rating: 50, stars: 5 },
-  { id: 19, name: 'Fish', price: 8.99, image: PLACEHOLDER_IMG, tag: 'Meat', size: '1 lb', rating: 40, stars: 5 },
-  { id: 20, name: 'Salt', price: 0.79, image: PLACEHOLDER_IMG, tag: 'Pantry', size: '8 oz', rating: 30, stars: 5 },
-  { id: 21, name: 'Pepper', price: 1.29, image: PLACEHOLDER_IMG, tag: 'Pantry', size: '4 oz', rating: 20, stars: 5 },
-  { id: 22, name: 'Oil', price: 3.99, image: PLACEHOLDER_IMG, tag: 'Pantry', size: '16 oz', rating: 10, stars: 5 },
-  { id: 23, name: 'Butter', price: 2.99, image: PLACEHOLDER_IMG, tag: 'Dairy', size: '8 oz', rating: 10, stars: 5 },
-  { id: 24, name: 'Flour', price: 2.49, image: PLACEHOLDER_IMG, tag: 'Pantry', size: '2 lb', rating: 10, stars: 5 },
-  { id: 25, name: 'Sugar', price: 1.99, image: PLACEHOLDER_IMG, tag: 'Pantry', size: '2 lb', rating: 10, stars: 5 },
+  { ingredient_id: 1, name: 'Onion', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 2, name: 'Tomato', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 3, name: 'Cucumber', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 4, name: 'Potato', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 5, name: 'Garlic', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 6, name: 'Carrot', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 7, name: 'Spinach', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 8, name: 'Broccoli', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 9, name: 'Chicken Breast', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 10, name: 'Eggs', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 11, name: 'Milk', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 12, name: 'Cheese', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 13, name: 'Rice', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 14, name: 'Pasta', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 15, name: 'Beef', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 16, name: 'Pork', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 17, name: 'Fish', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 18, name: 'Salt', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 19, name: 'Pepper', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 20, name: 'Oil', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 21, name: 'Butter', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 22, name: 'Flour', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 23, name: 'Sugar', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 24, name: 'Chicken Thighs', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 25, name: 'Steak', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
+  { ingredient_id: 26, name: 'Salmon', quantity: '1', created_at: '2024-06-01T10:00:00Z', image: salmonImg },
 ];
+
+const getIngredientImage = (ingredient: any) => {
+  // If a local image is provided, use it
+  if (ingredient.image && !ingredient.image.includes('unsplash.com')) return ingredient.image;
+  // Otherwise, use Spoonacular CDN
+  const formattedName = ingredient.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return `https://spoonacular.com/cdn/ingredients_100x100/${formattedName}.png`;
+};
 
 const GroceryPage: React.FC = () => {
   const { user } = useAuth();
@@ -55,7 +64,7 @@ const GroceryPage: React.FC = () => {
       const res = await fetch('/api/ingredients', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, name: ingredient.name, quantity: quantities[ingredient.id] || 1 }),
+        body: JSON.stringify({ user_id: userId, name: ingredient.name, quantity: quantities[ingredient.ingredient_id] || 1 }),
       });
       const data = await res.json();
       if (data.success) {
@@ -68,33 +77,68 @@ const GroceryPage: React.FC = () => {
     }
   };
 
+  const handleSubmitAll = async () => {
+    setMessage(null);
+    if (!userId) {
+      setMessage('You must be logged in to add ingredients.');
+      return;
+    }
+    // Prepare all ingredients with their selected quantities
+    const ingredientsToAdd = PRODUCT_INGREDIENTS.map(ingredient => ({
+      name: ingredient.name,
+      quantity: quantities[ingredient.ingredient_id] || ingredient.quantity,
+    }));
+    try {
+      const res = await fetch('/api/ingredients/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, ingredients: ingredientsToAdd }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMessage('All ingredients added to your grocery list!');
+      } else {
+        setMessage('Failed to add ingredients.');
+      }
+    } catch {
+      setMessage('Failed to add ingredients.');
+    }
+  };
+
   return (
     <div className="grocery-page-root">
       <h2 className="grocery-page-title">Grocery Ingredients</h2>
       {message && <div className="grocery-page-message">{message}</div>}
       <div className="grocery-product-grid">
         {PRODUCT_INGREDIENTS.map(ingredient => (
-          <div className="grocery-product-card" key={ingredient.id}>
-            <img src={ingredient.image} alt={ingredient.name} className="grocery-product-img" />
-            <div className="grocery-product-tag">{ingredient.tag}</div>
+          <div className="grocery-product-card" key={ingredient.ingredient_id}>
+            <img
+              src={getIngredientImage(ingredient)}
+              alt={ingredient.name}
+              className="grocery-product-img"
+              onError={e => {
+                (e.target as HTMLImageElement).src = PLACEHOLDER_IMG;
+              }}
+            />
             <div className="grocery-product-name">{ingredient.name}</div>
-            <div className="grocery-product-price">${ingredient.price.toFixed(2)}</div>
-            <div className="grocery-product-size">{ingredient.size}</div>
-            <div className="grocery-product-rating">
-              {'★'.repeat(ingredient.stars)}
-              <span className="grocery-product-rating-count">({ingredient.rating})</span>
-            </div>
             <div className="grocery-product-qty">
-              <button onClick={() => handleQuantityChange(ingredient.id, -1)}>-</button>
-              <span>{quantities[ingredient.id] || 1}</span>
-              <button onClick={() => handleQuantityChange(ingredient.id, 1)}>+</button>
+              <button onClick={() => handleQuantityChange(ingredient.ingredient_id, -1)}>-</button>
+              <span>{quantities[ingredient.ingredient_id] || ingredient.quantity}</span>
+              <button onClick={() => handleQuantityChange(ingredient.ingredient_id, 1)}>+</button>
             </div>
-            <button className="grocery-product-btn" onClick={() => handleAddToCart(ingredient)} disabled={!userId}>
-              Add to Cart
-            </button>
+            <div className="grocery-product-created">Added: {new Date(ingredient.created_at).toLocaleDateString()}</div>
+            {/* Remove individual Add to Cart button */}
           </div>
         ))}
       </div>
+      <button
+        className="grocery-submit-all-btn"
+        onClick={handleSubmitAll}
+        disabled={!userId}
+        style={{ marginTop: 32, padding: '16px 32px', fontSize: 18, fontWeight: 700, background: '#FF6B00', color: '#fff', border: 'none', borderRadius: 8, cursor: userId ? 'pointer' : 'not-allowed', fontFamily: 'Base Neue, sans-serif', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+      >
+        Submit All Ingredients
+      </button>
     </div>
   );
 };

@@ -117,6 +117,36 @@ app.post('/api/ingredients/remove', async (req, res) => {
   }
 });
 
+// Bulk insert ingredients for a user
+app.post('/api/ingredients/bulk', async (req, res) => {
+  const { user_id, ingredients } = req.body;
+  if (!user_id || !Array.isArray(ingredients) || ingredients.length === 0) {
+    return res.status(400).json({ error: 'user_id and ingredients array are required' });
+  }
+  // Validate each ingredient
+  for (const ing of ingredients) {
+    if (!ing.name || typeof ing.name !== 'string' || !ing.name.trim()) {
+      return res.status(400).json({ error: 'Each ingredient must have a non-empty name.' });
+    }
+  }
+  try {
+    // Build bulk insert query
+    const values = [];
+    const params = [];
+    let paramIndex = 1;
+    for (const ing of ingredients) {
+      values.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++})`);
+      params.push(user_id, ing.name.trim(), ing.quantity || 1);
+    }
+    const query = `INSERT INTO ingredients (user_id, name, quantity) VALUES ${values.join(", ")} RETURNING *`;
+    const result = await pool.query(query, params);
+    res.status(201).json({ success: true, ingredients: result.rows });
+  } catch (err) {
+    console.error('Bulk insert error:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
 // Add user directly (for admin or testing)
 app.post('/api/users', async (req, res) => {
   try {

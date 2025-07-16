@@ -16,6 +16,19 @@ export function setLogoutHandler(handler: () => void) {
   logoutHandler = handler;
 }
 
+// Attach token to every request if present
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+);
+
 // Add a response interceptor
 api.interceptors.response.use(
   response => response,
