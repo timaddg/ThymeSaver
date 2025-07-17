@@ -208,15 +208,25 @@ app.post('/api/generate-plan', async (req, res) => {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
     // Build the prompt for dish suggestions
-    const prompt = `You are a helpful cooking assistant. Based on the following available ingredients, suggest exactly 3 dishes that can be made using only these ingredients. For each dish, provide:
-- The dish name
-- A short description
-- The main ingredients used from the list
-- Estimated cooking time
+    const prompt = `You are a helpful cooking assistant. Based on the following available ingredients, suggest exactly 3 dishes that can be made using only these ingredients. 
+
+Please format your response exactly like this example:
+
+1. Dish Name
+Brief description of the dish
+Main ingredients: ingredient1, ingredient2, ingredient3
+
+2. Dish Name
+Brief description of the dish  
+Main ingredients: ingredient1, ingredient2, ingredient3
+
+3. Dish Name
+Brief description of the dish
+Main ingredients: ingredient1, ingredient2, ingredient3
 
 Available Ingredients: ${allIngredients.join(', ') || 'None'}
 
-You do not have to use all the ingredients in each dish. Only suggest dishes that can reasonably be made with the provided ingredients. List the dishes in order from least time needed to most time needed.`;
+You do not have to use all the ingredients in each dish. Only suggest dishes that can reasonably be made with the provided ingredients. Keep descriptions short and appetizing.`;
     try {
       const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const result = await geminiModel.generateContent(prompt);
