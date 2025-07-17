@@ -89,29 +89,6 @@ const GroceryPage: React.FC = () => {
     setQuantities(q => ({ ...q, [id]: Math.max(1, (q[id] || 1) + delta) }));
   };
 
-  const handleAddToCart = async (ingredient: any) => {
-    setMessage(null);
-    if (!userId) {
-      setMessage('You must be logged in to add ingredients.');
-      return;
-    }
-    try {
-      const res = await fetch('/api/ingredients', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, name: ingredient.name, quantity: quantities[ingredient.ingredient_id] || 1 }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setMessage(`${ingredient.name} added to your grocery list!`);
-      } else {
-        setMessage('Failed to add ingredient.');
-      }
-    } catch {
-      setMessage('Failed to add ingredient.');
-    }
-  };
-
   const handleSubmitAll = async () => {
     setMessage(null);
     if (!userId) {

@@ -5,7 +5,6 @@ import IngredientSection from './components/IngredientSection';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GroceryPage from './components/GroceryPage';
-import CartPage from './components/CartPage';
 import './App.css';
 
 function App() {
@@ -17,7 +16,6 @@ function App() {
           <Navbar hideLogo={!!mealPlan} />
           <Routes>
             <Route path="/grocery" element={<GroceryPage />} />
-            <Route path="/cart" element={<CartPage />} />
             <Route path="/" element={
               <>
                 <HeroSection mealPlan={mealPlan} setMealPlan={setMealPlan} />
