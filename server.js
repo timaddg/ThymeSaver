@@ -208,21 +208,39 @@ app.post('/api/generate-plan', async (req, res) => {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
     // Build the prompt for dish suggestions
-    const prompt = `You are a helpful cooking assistant. Based on the following available ingredients, suggest exactly 3 dishes that can be made using only these ingredients. 
+    const prompt = `You are a helpful cooking assistant. Based on the following available ingredients, suggest exactly 3 dishes that can be made using only these ingredients.
+
+For each dish, provide:
+- The dish name
+- A short description
+- The main ingredients used from the list
+- Step-by-step cooking instructions (numbered steps, clear and concise)
 
 Please format your response exactly like this example:
 
 1. Dish Name
 Brief description of the dish
 Main ingredients: ingredient1, ingredient2, ingredient3
+Instructions:
+1. Do this first.
+2. Do this next.
+3. Finish like this.
 
 2. Dish Name
-Brief description of the dish  
+Brief description of the dish
 Main ingredients: ingredient1, ingredient2, ingredient3
+Instructions:
+1. Do this first.
+2. Do this next.
+3. Finish like this.
 
 3. Dish Name
 Brief description of the dish
 Main ingredients: ingredient1, ingredient2, ingredient3
+Instructions:
+1. Do this first.
+2. Do this next.
+3. Finish like this.
 
 Available Ingredients: ${allIngredients.join(', ') || 'None'}
 

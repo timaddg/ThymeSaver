@@ -11,25 +11,29 @@ interface HeroSectionProps {
 
 function parseDishes(response: string) {
   console.log('Raw Gemini response:', response); // Debug log
-  
+
   // Try multiple parsing strategies
   let dishes = null;
-  
-  // Strategy 1: New structured format pattern
-  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)/gi;
+
+  // Strategy 1: New structured format pattern with instructions
+  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)\nInstructions:\n((?:\d+\. .+\n?)+)/gi;
   let matches = Array.from(response.matchAll(dishRegex));
-  
+
   if (matches.length > 0) {
     dishes = matches.map((m) => ({
       name: m[1].trim(),
       description: m[2].trim(),
       ingredients: m[3].split(',').map((i) => i.trim()),
+      instructions: m[4]
+        .split(/\n/)
+        .filter((line) => line.trim())
+        .map((line) => line.replace(/^\d+\.\s*/, '').trim()),
     }));
   } else {
     // Strategy 2: Split by lines and look for dish patterns
     const lines = response.split('\n').filter(line => line.trim());
     const dishLines = lines.filter(line => /^\d+\./.test(line));
-    
+
     if (dishLines.length > 0) {
       dishes = dishLines.slice(0, 3).map((line, idx) => {
         const name = line.replace(/^\d+\.\s*/, '').trim();
@@ -37,11 +41,12 @@ function parseDishes(response: string) {
           name: name || `Dish ${idx + 1}`,
           description: 'A delicious dish made with available ingredients',
           ingredients: [],
+          instructions: [],
         };
       });
     }
   }
-  
+
   console.log('Parsed dishes:', dishes); // Debug log
   return dishes;
 }
