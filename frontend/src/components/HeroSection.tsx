@@ -77,6 +77,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
   const [error, setError] = useState<string | null>(null);
   const [selectedDish, setSelectedDish] = useState<number | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [hasIngredients, setHasIngredients] = useState<boolean | null>(null);
 
   const handleAskGemini = async () => {
     if (!user) {
@@ -84,21 +85,26 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
       return;
     }
 
-    setLoading(true);
     setError(null);
     setMealPlan(null);
     setSelectedDish(null);
+    
     try {
-      // 1. Fetch ingredients for the user
+      // 1. Fetch ingredients for the user first
       const ingRes = await fetch(`/api/ingredients?user_id=${user.id}`);
       const ingData = await ingRes.json();
       if (!ingData.success) throw new Error('Failed to fetch ingredients');
       const ingredients = ingData.ingredients.map((i: any) => i.name);
 
       if (ingredients.length === 0) {
+        setHasIngredients(false);
         setError('No ingredients found. Please add some ingredients to your grocery list first.');
         return;
       }
+
+      setHasIngredients(true);
+      // Only set loading to true if we have ingredients to work with
+      setLoading(true);
 
       // 2. Send to Gemini meal plan endpoint
       const planRes = await fetch('/api/generate-plan', {
@@ -158,6 +164,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
         </button>
         {error && <div className="hero-error">{error}</div>}
         {loading && <div className="hero-loading">Generating your meal plan...</div>}
+        
+        {/* Display "Time to stock up" when no ingredients */}
+        {hasIngredients === false && (
+          <div className="stock-up-section">
+            <h2 className="stock-up-title">Time to stock up</h2>
+            <p className="stock-up-message">
+              Add some ingredients to your grocery list to get personalized meal suggestions.
+            </p>
+            <button 
+              className="stock-up-btn"
+              onClick={() => window.location.href = '/grocery'}
+            >
+              Go to Grocery List
+            </button>
+          </div>
+        )}
         
         {/* Display generated meal plan */}
         {dishes && dishes.length > 0 && (
