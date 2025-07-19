@@ -5,6 +5,7 @@ interface Dish {
   name: string;
   description: string;
   ingredients: string[];
+  instructions?: string[];
 }
 
 interface DishSectionProps {
@@ -60,6 +61,9 @@ const DishSection: React.FC<DishSectionProps> = ({
       <div className="dish-cards">
         {dishes.map((dish, idx) => (
           <div key={idx} className="dish-card">
+            <div className="dish-logo">
+              <span className="logo-text">ThymeSaver</span>
+            </div>
             <div className="dish-image">
               <img
                 src={getDishImage(dish.name)}

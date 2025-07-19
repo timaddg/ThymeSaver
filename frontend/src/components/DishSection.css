@@ -29,6 +29,19 @@
   font-family: 'BaseNeueTrial-Regular', 'BaseNeueTrial-Bold', 'BaseNeueTrial', sans-serif;
 }
 
+.dish-logo {
+  padding: 1rem 1.5rem 0.5rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dish-logo .logo-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  font-family: 'BaseNeueTrial-Bold', 'BaseNeueTrial-Regular', 'BaseNeueTrial', sans-serif;
+  letter-spacing: 0.5px;
+}
+
 .dish-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);

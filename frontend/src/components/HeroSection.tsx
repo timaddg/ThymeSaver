@@ -15,8 +15,8 @@ function parseDishes(response: string) {
   // Try multiple parsing strategies
   let dishes = null;
 
-  // Strategy 1: New structured format pattern with instructions
-  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)\nInstructions:\n((?:\d+\. .+\n?)+)/gi;
+  // Strategy 1: More flexible pattern that handles variations in formatting
+  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)(?:\nInstructions:\n((?:\d+\. .+\n?)+))?/gi;
   let matches = Array.from(response.matchAll(dishRegex));
 
   if (matches.length > 0) {
@@ -24,26 +24,46 @@ function parseDishes(response: string) {
       name: m[1].trim(),
       description: m[2].trim(),
       ingredients: m[3].split(',').map((i) => i.trim()),
-      instructions: m[4]
+      instructions: m[4] ? m[4]
         .split(/\n/)
         .filter((line) => line.trim())
-        .map((line) => line.replace(/^\d+\.\s*/, '').trim()),
+        .map((line) => line.replace(/^\d+\.\s*/, '').trim()) : [],
     }));
   } else {
-    // Strategy 2: Split by lines and look for dish patterns
+    // Strategy 2: Look for numbered dishes with description on next line
     const lines = response.split('\n').filter(line => line.trim());
-    const dishLines = lines.filter(line => /^\d+\./.test(line));
-
-    if (dishLines.length > 0) {
-      dishes = dishLines.slice(0, 3).map((line, idx) => {
-        const name = line.replace(/^\d+\.\s*/, '').trim();
-        return {
-          name: name || `Dish ${idx + 1}`,
-          description: 'A delicious dish made with available ingredients',
+    const dishBlocks = [];
+    let currentBlock = null;
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (/^\d+\./.test(line)) {
+        if (currentBlock) {
+          dishBlocks.push(currentBlock);
+        }
+        currentBlock = {
+          name: line.replace(/^\d+\.\s*/, '').trim(),
+          description: '',
           ingredients: [],
-          instructions: [],
+          instructions: []
         };
-      });
+      } else if (currentBlock && !currentBlock.description && line.trim()) {
+        // First non-empty line after dish name is description
+        currentBlock.description = line.trim();
+      }
+    }
+    
+    if (currentBlock) {
+      dishBlocks.push(currentBlock);
+    }
+    
+    if (dishBlocks.length > 0) {
+      dishes = dishBlocks.slice(0, 3).map((block, idx) => ({
+        name: block.name || `Dish ${idx + 1}`,
+        description: block.description || 'A delicious dish made with available ingredients',
+        ingredients: block.ingredients || [],
+        instructions: block.instructions || [],
+      }));
     }
   }
 
