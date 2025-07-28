@@ -75,9 +75,6 @@ const DishSection: React.FC<DishSectionProps> = ({
       <div className="dish-cards">
         {dishes.map((dish, idx) => (
           <div key={idx} className="dish-card">
-            <div className="dish-logo">
-              <span className="logo-text">ThymeSaver</span>
-            </div>
             <div className="dish-image">
               <img
                 src={getDishImage(dish.name, dish.ingredients)}
@@ -89,26 +86,27 @@ const DishSection: React.FC<DishSectionProps> = ({
                 }}
               />
             </div>
-            <h3 className="dish-title">{dish.name || `Dish ${idx + 1}`}</h3>
-            <p className="dish-description">
-              {dish.description || 'A delicious dish made with available ingredients'}
-            </p>
-            <div className="dish-cooking-time">
-              {dish.ingredients && dish.ingredients.length > 0 
-                ? `${Math.max(15, dish.ingredients.length * 5)} min Cooking Time`
-                : '15 min Cooking Time'
-              }
+            <div className="dish-content">
+              <h3 className="dish-title">{dish.name || `Dish ${idx + 1}`}</h3>
+              <p className="dish-description">
+                {dish.description || 'A delicious dish made with available ingredients'}
+              </p>
+              <div className="dish-buttons">
+                <button
+                  className="cook-button primary"
+                  onClick={() => onCookThis(idx, dish)}
+                  disabled={selectedDish === idx}
+                >
+                  {selectedDish === idx ? 'COOKING...' : "Let's Cook this"}
+                </button>
+                <button className="cook-button secondary">
+                  View Details
+                </button>
+              </div>
+              {selectedDish === idx && confirmation && (
+                <div className="cook-confirmation">{confirmation}</div>
+              )}
             </div>
-            <button
-              className="select-button"
-              onClick={() => onCookThis(idx, dish)}
-              disabled={selectedDish === idx}
-            >
-              {selectedDish === idx ? 'COOKING...' : 'SELECT'}
-            </button>
-            {selectedDish === idx && confirmation && (
-              <div className="cook-confirmation">{confirmation}</div>
-            )}
           </div>
         ))}
       </div>
