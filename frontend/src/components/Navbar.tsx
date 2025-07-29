@@ -9,11 +9,42 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
-  const { user, logout, login } = useAuth();
+  const { user, logout, login, updateActivity } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState<null | 'login' | 'signup'>(null);
+  const [sessionTimeLeft, setSessionTimeLeft] = useState<number>(3600); // 1 hour in seconds
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Session timer effect
+  useEffect(() => {
+    if (!user) {
+      setSessionTimeLeft(3600);
+      return;
+    }
+
+    const lastActivity = localStorage.getItem('last_activity');
+    if (!lastActivity) return;
+
+    const updateSessionTime = () => {
+      const lastActivityTime = parseInt(lastActivity);
+      const timeSinceLastActivity = Date.now() - lastActivityTime;
+      const timeLeft = Math.max(0, 3600 - Math.floor(timeSinceLastActivity / 1000));
+      setSessionTimeLeft(timeLeft);
+    };
+
+    updateSessionTime();
+    const interval = setInterval(updateSessionTime, 1000);
+
+    return () => clearInterval(interval);
+  }, [user]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,6 +100,12 @@ const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
           </>
         ) : (
           <>
+            <div className="session-timer">
+              <span className="session-time-label">Session:</span>
+              <span className={`session-time ${sessionTimeLeft < 300 ? 'session-time-warning' : ''}`}>
+                {formatTime(sessionTimeLeft)}
+              </span>
+            </div>
             <button className="search-icon-btn" aria-label="Search">
               <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </button>

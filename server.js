@@ -18,6 +18,9 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Initialize PostgreSQL pool
 const pool = new Pool(); // uses .env for config
 
+// JWT Secret - use environment variable or generate a persistent secret
+const JWT_SECRET = process.env.JWT_SECRET || 'thymesaver-secret-key-2024';
+
 // In-memory ingredient storage (fallback)
 const ingredients = [];
 
@@ -368,8 +371,8 @@ app.post('/api/auth/login', async (req, res) => {
     const jwt = require('jsonwebtoken');
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
+      JWT_SECRET,
+      { expiresIn: '1h' }
     );
     res.json({
       success: true,
@@ -383,6 +386,45 @@ app.post('/api/auth/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// Validate token endpoint
+app.get('/api/auth/me', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('Auth: No token provided in header');
+      return res.status(401).json({ error: 'No token provided' });
+    }
+    
+    const token = authHeader.substring(7);
+    console.log('Auth: Validating token:', token.substring(0, 20) + '...');
+    
+    const jwt = require('jsonwebtoken');
+    
+    const decoded = jwt.verify(token, JWT_SECRET);
+    console.log('Auth: Token decoded successfully for user ID:', decoded.userId);
+    
+    // Get user from database
+    const result = await pool.query(
+      'SELECT id, username, email FROM users WHERE id = $1',
+      [decoded.userId]
+    );
+    
+    if (result.rows.length === 0) {
+      console.log('Auth: User not found in database for ID:', decoded.userId);
+      return res.status(401).json({ error: 'User not found' });
+    }
+    
+    console.log('Auth: User validated successfully:', result.rows[0].username);
+    res.json({
+      success: true,
+      user: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Auth: Token validation error:', error.message);
+    res.status(401).json({ error: 'Invalid token' });
   }
 });
 

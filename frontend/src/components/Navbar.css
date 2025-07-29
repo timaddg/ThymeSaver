@@ -88,6 +88,43 @@
   background: #e67c00;
 }
 
+.session-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 152, 0, 0.2);
+}
+
+.session-time-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.session-time {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ff9800;
+  font-family: 'Courier New', monospace;
+  min-width: 45px;
+  text-align: center;
+}
+
+.session-time-warning {
+  color: #f44336;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
 .user-icon-btn, .cart-icon-btn, .search-icon-btn {
   background: none;
   border: none;
