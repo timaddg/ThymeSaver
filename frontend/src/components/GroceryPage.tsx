@@ -86,7 +86,11 @@ const GroceryPage: React.FC = () => {
   const [quantities, setQuantities] = useState<{ [id: number]: number }>({});
 
   const handleQuantityChange = (id: number, delta: number) => {
-    setQuantities(q => ({ ...q, [id]: Math.max(1, (q[id] || 1) + delta) }));
+    setQuantities(q => {
+      const currentQuantity = q[id] || 0;
+      const newQuantity = currentQuantity + delta;
+      return { ...q, [id]: Math.max(0, newQuantity) };
+    });
   };
 
   const handleSubmitAll = async () => {
@@ -145,7 +149,7 @@ const GroceryPage: React.FC = () => {
             <div className="grocery-product-name">{ingredient.name}</div>
             <div className="grocery-product-qty">
               <button onClick={() => handleQuantityChange(ingredient.ingredient_id, -1)}>-</button>
-              <span>{quantities[ingredient.ingredient_id] || ingredient.quantity}</span>
+              <span>{quantities[ingredient.ingredient_id] || 0}</span>
               <button onClick={() => handleQuantityChange(ingredient.ingredient_id, 1)}>+</button>
             </div>
             <div className="grocery-product-created">Added: {new Date(ingredient.created_at).toLocaleDateString()}</div>
