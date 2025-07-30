@@ -71,36 +71,51 @@ const DishSection: React.FC<DishSectionProps> = ({
   }
 
   return (
-    <div className="dish-section">
-      <div className="dish-cards">
+    <div className="recommendations-section">
+      <div className="recommendations-header">
+        <h2 className="recommendations-title">My Recommendations</h2>
+        <p className="recommendations-subtitle">
+          We consider all the drivers of change gives you the components you need to change to create a truly happens.
+        </p>
+      </div>
+      <div className="recommendations-grid">
         {dishes.map((dish, idx) => (
-          <div key={idx} className="dish-card">
-            <div className="dish-image">
+          <div key={idx} className="recommendation-card">
+            <div className="recommendation-image">
               <img
                 src={getDishImage(dish.name, dish.ingredients)}
                 alt={dish.name}
-                className="dish-img"
+                className="recommendation-img"
                 onError={(e) => {
                   // Fallback to default image if loading fails
                   e.currentTarget.src = 'https://images.unsplash.com/photo-1504674902479-cc8363a57a48?auto=format&fit=crop&w=300&q=80';
                 }}
               />
             </div>
-            <div className="dish-content">
-              <h3 className="dish-title">{dish.name || `Dish ${idx + 1}`}</h3>
-              <p className="dish-description">
-                {dish.description || 'A delicious dish made with available ingredients'}
+            <div className="recommendation-content">
+              <h3 className="recommendation-title">{dish.name || `Dish ${idx + 1}`}</h3>
+              <p className="recommendation-description">
+                {dish.description || 'Made with fresh ingredients and prepared with care.'}
               </p>
-              <div className="dish-buttons">
+              {dish.instructions && dish.instructions.length > 0 && (
+                <div className="cooking-instructions">
+                  <h4 className="instructions-title">How to cook:</h4>
+                  <ol className="instructions-list">
+                    {dish.instructions.map((instruction, index) => (
+                      <li key={index} className="instruction-item">
+                        {instruction}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              <div className="recommendation-actions">
                 <button
-                  className="cook-button primary"
+                  className="select-btn"
                   onClick={() => onCookThis(idx, dish)}
                   disabled={selectedDish === idx}
                 >
-                  {selectedDish === idx ? 'COOKING...' : "Let's Cook this"}
-                </button>
-                <button className="cook-button secondary">
-                  View Details
+                  {selectedDish === idx ? 'COOKING...' : 'Select'}
                 </button>
               </div>
               {selectedDish === idx && confirmation && (
