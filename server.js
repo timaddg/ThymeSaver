@@ -120,6 +120,42 @@ app.post('/api/ingredients/remove', async (req, res) => {
   }
 });
 
+// Save dish to user's history
+app.post('/api/dish-history', async (req, res) => {
+  const { user_id, dish_name, description, ingredients, instructions } = req.body;
+  if (!user_id || !dish_name) {
+    return res.status(400).json({ error: 'user_id and dish_name are required' });
+  }
+  try {
+    const result = await pool.query(
+      'INSERT INTO dish_history (user_id, dish_name, description, ingredients, instructions, selected_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *',
+      [user_id, dish_name, description || '', JSON.stringify(ingredients || []), JSON.stringify(instructions || [])]
+    );
+    res.status(201).json({ success: true, dish: result.rows[0] });
+  } catch (err) {
+    console.error('Error saving dish to history:', err);
+    res.status(500).json({ error: 'Failed to save dish to history' });
+  }
+});
+
+// Get user's dish history
+app.get('/api/dish-history', async (req, res) => {
+  const { user_id } = req.query;
+  if (!user_id) {
+    return res.status(400).json({ error: 'user_id is required' });
+  }
+  try {
+    const result = await pool.query(
+      'SELECT * FROM dish_history WHERE user_id = $1 ORDER BY selected_at DESC',
+      [user_id]
+    );
+    res.json({ success: true, dishes: result.rows });
+  } catch (err) {
+    console.error('Error fetching dish history:', err);
+    res.status(500).json({ error: 'Failed to fetch dish history' });
+  }
+});
+
 // Bulk insert ingredients for a user
 app.post('/api/ingredients/bulk', async (req, res) => {
   const { user_id, ingredients } = req.body;

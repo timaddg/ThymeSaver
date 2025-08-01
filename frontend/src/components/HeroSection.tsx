@@ -131,6 +131,24 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
     setSelectedDish(idx);
     setConfirmation(null);
     try {
+      // Save dish to history first
+      const historyRes = await fetch('/api/dish-history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user.id,
+          dish_name: dish.name,
+          description: dish.description,
+          ingredients: dish.ingredients,
+          instructions: dish.instructions
+        }),
+      });
+      
+      if (!historyRes.ok) {
+        console.error('Failed to save dish to history');
+      }
+
+      // Then remove ingredients from grocery list
       const res = await fetch('/api/ingredients/remove', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -138,7 +156,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
       });
       const data = await res.json();
       if (data.success) {
-        setConfirmation('Grocery items updated');
+        setConfirmation('Dish saved to history and grocery items updated!');
         // Optionally, you could refresh the ingredient list here
       } else {
         setConfirmation('Failed to update grocery items');

@@ -1,0 +1,229 @@
+/* Dish History Styles */
+.dish-history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Base Neue', Arial, sans-serif;
+}
+
+.dish-history-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.dish-history-title {
+  font-family: 'Base Neue', 'Georgia', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.dish-history-subtitle {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.dish-history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.dish-history-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  border: 1px solid #e8f5e8;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dish-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.dish-history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e8f5e8;
+}
+
+.dish-history-dish-name {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.dish-history-date {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  background: #f8f9fa;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+.dish-history-description {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 0.95rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+
+.dish-history-ingredients,
+.dish-history-instructions {
+  margin-bottom: 1.2rem;
+}
+
+.dish-history-ingredients h4,
+.dish-history-instructions h4 {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.dish-history-ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dish-history-ingredients li {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  padding: 0.2rem 0;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.dish-history-ingredients li::before {
+  content: "•";
+  color: #ff9800;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.dish-history-instructions ol {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.dish-history-instructions li {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.dish-history-empty,
+.dish-history-loading,
+.dish-history-error {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.dish-history-empty h2,
+.dish-history-loading h2,
+.dish-history-error h2 {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.dish-history-empty p,
+.dish-history-error p {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+}
+
+.retry-btn {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+}
+
+.retry-btn:hover {
+  background: #e67c00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dish-history-container {
+    padding: 1rem;
+  }
+  
+  .dish-history-title {
+    font-size: 2rem;
+  }
+  
+  .dish-history-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .dish-history-card {
+    padding: 1.2rem;
+  }
+  
+  .dish-history-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .dish-history-date {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dish-history-title {
+    font-size: 1.8rem;
+  }
+  
+  .dish-history-subtitle {
+    font-size: 1rem;
+  }
+  
+  .dish-history-card {
+    padding: 1rem;
+  }
+  
+  .dish-history-dish-name {
+    font-size: 1.2rem;
+  }
+} 

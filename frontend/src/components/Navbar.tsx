@@ -56,8 +56,9 @@ const Navbar: React.FC<NavbarProps> = ({ hideLogo }) => {
       )}
       <ul className="navbar-menu">
         <li><Link to="/" className="nav-link">Home</Link></li>
-        <li><a href="#" className="nav-link">Recipes</a></li>
+        <li><Link to="/recipes" className="nav-link">Recipes</Link></li>
         <li><Link to="/grocery" className="nav-link">Grocery</Link></li>
+        <li><Link to="/history" className="nav-link">History</Link></li>
         <li><a href="#" className="nav-link">Our Story</a></li>
       </ul>
       <div className="navbar-actions">
