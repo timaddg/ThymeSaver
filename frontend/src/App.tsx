@@ -13,7 +13,7 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="App">
-          <Navbar hideLogo={!!mealPlan} />
+          <Navbar />
           <Routes>
             <Route path="/grocery" element={<GroceryPage />} />
             <Route path="/" element={
