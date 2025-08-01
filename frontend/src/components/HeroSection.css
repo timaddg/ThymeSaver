@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa;
+  background: url('../assets/hero-bowl.jpg') center center/cover no-repeat;
   overflow: hidden;
   margin: 0;
   padding: 2rem 0;
@@ -31,10 +31,11 @@
   font-family: 'Base Neue', 'Georgia', serif;
   font-size: 3.5rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #fff;
   margin-bottom: 1.5rem;
   letter-spacing: -0.5px;
   line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 
 .hero-cta-btn {
