@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useLocation } from 'react-router-dom';
 import './DishHistory.css';
 
 interface DishHistoryItem {
@@ -14,13 +13,9 @@ interface DishHistoryItem {
 
 const DishHistory: React.FC = () => {
   const { user } = useAuth();
-  const location = useLocation();
   const [dishes, setDishes] = useState<DishHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // Determine if this is the recipes page or history page
-  const isRecipesPage = location.pathname === '/recipes';
 
   useEffect(() => {
     if (user) {
@@ -100,28 +95,16 @@ const DishHistory: React.FC = () => {
   return (
     <div className="dish-history-container">
       <div className="dish-history-header">
-        <h1 className="dish-history-title">
-          {isRecipesPage ? 'Your Recipe Collection' : 'Your Cooking History'}
-        </h1>
+        <h1 className="dish-history-title">Your Recipe Collection</h1>
         <p className="dish-history-subtitle">
-          {isRecipesPage 
-            ? 'Discover and revisit all the delicious recipes you\'ve selected'
-            : 'Track all the delicious dishes you\'ve selected and cooked'
-          }
+          Discover and revisit all the delicious recipes you've selected
         </p>
       </div>
 
       {dishes.length === 0 ? (
         <div className="dish-history-empty">
-          <h2>
-            {isRecipesPage ? 'No recipes in your collection yet' : 'No dishes in your history yet'}
-          </h2>
-          <p>
-            {isRecipesPage 
-              ? 'Start building your recipe collection by selecting dishes from your meal recommendations!'
-              : 'Start cooking by selecting dishes from your meal recommendations!'
-            }
-          </p>
+          <h2>No recipes in your collection yet</h2>
+          <p>Start building your recipe collection by selecting dishes from your meal recommendations!</p>
         </div>
       ) : (
         <div className="dish-history-grid">

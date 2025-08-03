@@ -18,7 +18,6 @@ function App() {
           <Routes>
             <Route path="/grocery" element={<GroceryPage />} />
             <Route path="/recipes" element={<DishHistory />} />
-            <Route path="/history" element={<DishHistory />} />
             <Route path="/" element={
               <>
                 <HeroSection mealPlan={mealPlan} setMealPlan={setMealPlan} />
