@@ -1,0 +1,263 @@
+/* Our Story Styles */
+.our-story-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Base Neue', Arial, sans-serif;
+  background: #fff;
+}
+
+.our-story-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 20px;
+  margin: -2rem -2rem 4rem -2rem;
+}
+
+.our-story-title {
+  font-family: 'Base Neue', 'Georgia', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.our-story-subtitle {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.our-story-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.story-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.story-section-reverse {
+  direction: rtl;
+}
+
+.story-section-reverse .story-text-section {
+  direction: ltr;
+}
+
+.story-image-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.story-image-placeholder {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, #ff9800 0%, #e67c00 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.story-image-placeholder:hover {
+  transform: scale(1.05);
+}
+
+.story-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.story-text-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.story-section-title {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.story-text {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.1rem;
+  color: #5a6c7d;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.story-cta-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border-radius: 20px;
+  color: #fff;
+  margin-top: 2rem;
+}
+
+.story-cta-title {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.story-cta-text {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #ecf0f1;
+}
+
+.story-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.story-cta-btn {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.story-cta-btn.primary {
+  background: #ff9800;
+  color: #fff;
+}
+
+.story-cta-btn.primary:hover {
+  background: #e67c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
+}
+
+.story-cta-btn.secondary {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+.story-cta-btn.secondary:hover {
+  background: #fff;
+  color: #2c3e50;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .story-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .story-section-reverse {
+    direction: ltr;
+  }
+  
+  .story-image-placeholder {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .story-icon {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .our-story-container {
+    padding: 1rem;
+  }
+  
+  .our-story-header {
+    margin: -1rem -1rem 3rem -1rem;
+    padding: 2rem 1rem;
+  }
+  
+  .our-story-title {
+    font-size: 2.5rem;
+  }
+  
+  .our-story-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .story-section-title {
+    font-size: 1.8rem;
+  }
+  
+  .story-text {
+    font-size: 1rem;
+  }
+  
+  .story-cta-section {
+    padding: 3rem 1rem;
+  }
+  
+  .story-cta-title {
+    font-size: 2rem;
+  }
+  
+  .story-cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .story-cta-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .our-story-title {
+    font-size: 2rem;
+  }
+  
+  .story-section-title {
+    font-size: 1.5rem;
+  }
+  
+  .story-image-placeholder {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .story-icon {
+    font-size: 2.5rem;
+  }
+} 
