@@ -1,0 +1,315 @@
+/* Receipt Upload Styles */
+.receipt-upload-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  font-family: 'Base Neue', Arial, sans-serif;
+  background: transparent;
+}
+
+.receipt-upload-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.receipt-upload-title {
+  font-family: 'Base Neue', 'Georgia', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.receipt-upload-subtitle {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.receipt-upload-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.receipt-upload-area {
+  border: 3px dashed #ff9800;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+}
+
+.receipt-upload-area:hover {
+  border-color: #e67c00;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.15);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.receipt-upload-area h3 {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.receipt-upload-area p {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.9rem !important;
+  color: #95a5a6 !important;
+  font-style: italic;
+}
+
+.receipt-preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.receipt-preview {
+  position: relative;
+  max-width: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.receipt-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.clear-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #e74c3c;
+  transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.receipt-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.extract-btn {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.extract-btn:hover:not(:disabled) {
+  background: #e67c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
+}
+
+.extract-btn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.receipt-error,
+.receipt-success {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-weight: 500;
+}
+
+.receipt-error {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.receipt-success {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.extracted-ingredients {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid #e9ecef;
+}
+
+.extracted-ingredients h3 {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.ingredients-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ingredient-item {
+  background: #fff;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 0.95rem;
+  color: #2c3e50;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.ingredient-item:hover {
+  border-color: #ff9800;
+  background: #fff8e1;
+  transform: translateY(-1px);
+}
+
+.add-to-grocery-btn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.add-to-grocery-btn:hover:not(:disabled) {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+}
+
+.add-to-grocery-btn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.receipt-upload-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.receipt-upload-empty h2 {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #7f8c8d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .receipt-upload-container {
+    padding: 1rem;
+  }
+  
+  .receipt-upload-title {
+    font-size: 2rem;
+  }
+  
+  .receipt-upload-subtitle {
+    font-size: 1rem;
+  }
+  
+  .receipt-upload-area {
+    padding: 2rem 1rem;
+  }
+  
+  .upload-icon {
+    font-size: 2.5rem;
+  }
+  
+  .receipt-upload-area h3 {
+    font-size: 1.3rem;
+  }
+  
+  .ingredients-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .receipt-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .extract-btn,
+  .add-to-grocery-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .receipt-upload-title {
+    font-size: 1.8rem;
+  }
+  
+  .receipt-upload-area {
+    padding: 1.5rem 1rem;
+  }
+  
+  .upload-icon {
+    font-size: 2rem;
+  }
+  
+  .extracted-ingredients {
+    padding: 1.5rem;
+  }
+} 

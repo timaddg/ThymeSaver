@@ -3,7 +3,7 @@ import './OurStory.css';
 
 const OurStory: React.FC = () => {
   return (
-    <div className="our-story-container">
+    <>
       <div className="our-story-header">
         <h1 className="our-story-title">Our Story</h1>
         <p className="our-story-subtitle">
@@ -15,7 +15,7 @@ const OurStory: React.FC = () => {
         <div className="story-section">
           <div className="story-image-section">
             <div className="story-image-placeholder">
-              <span className="story-icon">🏠</span>
+              <div className="story-icon-text">01</div>
             </div>
           </div>
           <div className="story-text-section">
@@ -50,7 +50,7 @@ const OurStory: React.FC = () => {
           </div>
           <div className="story-image-section">
             <div className="story-image-placeholder">
-              <span className="story-icon">💡</span>
+              <div className="story-icon-text">02</div>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@ const OurStory: React.FC = () => {
         <div className="story-section">
           <div className="story-image-section">
             <div className="story-image-placeholder">
-              <span className="story-icon">🤖</span>
+              <div className="story-icon-text">03</div>
             </div>
           </div>
           <div className="story-text-section">
@@ -92,7 +92,7 @@ const OurStory: React.FC = () => {
           </div>
           <div className="story-image-section">
             <div className="story-image-placeholder">
-              <span className="story-icon">⏰</span>
+              <div className="story-icon-text">04</div>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ const OurStory: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -78,8 +78,11 @@
   transform: scale(1.05);
 }
 
-.story-icon {
-  font-size: 4rem;
+.story-icon-text {
+  font-family: 'Base Neue', Arial, sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
@@ -193,8 +196,8 @@
     height: 150px;
   }
   
-  .story-icon {
-    font-size: 3rem;
+  .story-icon-text {
+    font-size: 2.5rem;
   }
 }
 
@@ -257,7 +260,7 @@
     height: 120px;
   }
   
-  .story-icon {
-    font-size: 2.5rem;
+  .story-icon-text {
+    font-size: 2rem;
   }
 } 

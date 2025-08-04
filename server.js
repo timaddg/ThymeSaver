@@ -156,6 +156,89 @@ app.get('/api/dish-history', async (req, res) => {
   }
 });
 
+// Extract ingredients from receipt image using Gemini Vision
+app.post('/api/extract-ingredients', async (req, res) => {
+  try {
+    const { user_id, image, filename } = req.body;
+    
+    if (!user_id || !image) {
+      return res.status(400).json({ error: 'user_id and image are required' });
+    }
+
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(500).json({ error: 'Gemini API key not configured' });
+    }
+
+    // Create the prompt for Gemini Vision
+    const prompt = `You are an AI assistant that extracts food ingredients from grocery receipts. 
+
+Please analyze this receipt image and extract ONLY the food ingredients/items that can be used for cooking. 
+
+Rules:
+1. Only extract actual food ingredients (vegetables, fruits, meat, dairy, grains, spices, etc.)
+2. Ignore non-food items (cleaning supplies, toiletries, etc.)
+3. Ignore quantities, prices, and store information
+4. Extract the base ingredient name (e.g., "tomatoes" not "organic tomatoes 2lb")
+5. Return a clean list of ingredients separated by commas
+6. Do not include any explanations, just the ingredient names
+
+Example output format:
+tomatoes, onions, chicken breast, rice, olive oil, garlic, spinach
+
+Please extract the ingredients from this receipt:`;
+
+    try {
+      const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      
+      // Create the image part for Gemini
+      const imagePart = {
+        inlineData: {
+          data: image,
+          mimeType: 'image/jpeg'
+        }
+      };
+
+      const result = await geminiModel.generateContent([prompt, imagePart]);
+      const response = await result.response;
+      const text = response.text();
+
+      // Parse the response to extract ingredients
+      let ingredients = [];
+      
+      // Clean up the response and split by commas
+      const cleanedText = text.trim().toLowerCase();
+      ingredients = cleanedText.split(',').map(item => item.trim()).filter(item => item.length > 0);
+
+      // Remove common non-ingredient words that might appear
+      const nonIngredients = ['receipt', 'total', 'tax', 'subtotal', 'change', 'cash', 'card', 'thank', 'you', 'visit', 'again'];
+      ingredients = ingredients.filter(item => !nonIngredients.includes(item));
+
+      console.log('Extracted ingredients:', ingredients);
+
+      res.json({
+        success: true,
+        ingredients: ingredients,
+        count: ingredients.length,
+        originalResponse: text
+      });
+
+    } catch (error) {
+      console.error('Gemini Vision API error:', error);
+      res.status(500).json({ 
+        error: 'Failed to process image with AI',
+        details: error.message 
+      });
+    }
+
+  } catch (error) {
+    console.error('Extract ingredients error:', error);
+    res.status(500).json({ 
+      error: 'Failed to extract ingredients',
+      details: error.message 
+    });
+  }
+});
+
 // Bulk insert ingredients for a user
 app.post('/api/ingredients/bulk', async (req, res) => {
   const { user_id, ingredients } = req.body;

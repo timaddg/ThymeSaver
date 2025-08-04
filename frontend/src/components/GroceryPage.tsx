@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import ReceiptUpload from './ReceiptUpload';
 import './GroceryPage.css';
 import salmonImg from '../assets/Salmon.jpg';
 import chickenTacosImg from '../assets/ChickenTacos.jpg';
@@ -133,8 +134,14 @@ const GroceryPage: React.FC = () => {
 
   return (
     <div className="grocery-page-root">
+      {/* Receipt Upload Section - Right below Navbar */}
+      <div className="receipt-upload-section">
+        <ReceiptUpload />
+      </div>
+      
       <h2 className="grocery-page-title">Grocery Ingredients</h2>
       {message && <div className="grocery-page-message">{message}</div>}
+      
       <div className="grocery-product-grid">
         {PRODUCT_INGREDIENTS.map(ingredient => (
           <div className="grocery-product-card" key={ingredient.ingredient_id}>

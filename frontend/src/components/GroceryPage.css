@@ -141,4 +141,28 @@
     width: 70px;
     height: 70px;
   }
+}
+
+.receipt-upload-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+  border-radius: 16px;
+  border: 2px solid #ff9800;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.1);
+  position: relative;
+}
+
+.receipt-upload-section::before {
+  content: "📷 Quick Add from Receipt";
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background: #ff9800;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Base Neue', Arial, sans-serif;
 } 
