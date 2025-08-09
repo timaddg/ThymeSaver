@@ -41,7 +41,7 @@
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid #e2e8f0;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  background: #f97316;
   color: white;
 }
 
@@ -247,6 +247,152 @@
   line-height: 1.5;
 }
 
+/* Dietary Restrictions Styles */
+.dietary-categories {
+  margin-bottom: 2rem;
+}
+
+.category-section {
+  margin-bottom: 2rem;
+}
+
+.category-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.dietary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.dietary-item {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.dietary-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.dietary-item.selected {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #f97316;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.dietary-item.selected:hover {
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+}
+
+.dietary-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.dietary-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.dietary-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #059669;
+  background: white;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.dietary-item.selected .dietary-checkbox {
+  background: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+/* Preferences Actions */
+.preferences-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.save-preferences-btn {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.save-preferences-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.save-preferences-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.saving-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.selection-summary {
+  color: #64748b;
+  font-size: 0.75rem;
+  margin: 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Legacy placeholder styles (keeping for compatibility) */
 .preferences-placeholder {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -337,6 +483,24 @@
     grid-template-columns: repeat(2, 1fr);
   }
   
+  .dietary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .dietary-item {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .dietary-name {
+    font-size: 0.8rem;
+  }
+  
+  .category-title {
+    font-size: 0.9rem;
+  }
+  
   .tab-btn {
     padding: 0.75rem;
     font-size: 0.875rem;
@@ -357,6 +521,29 @@
   
   .preferences-placeholder {
     grid-template-columns: 1fr;
+  }
+  
+  .dietary-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .dietary-item {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .dietary-name {
+    font-size: 0.75rem;
+  }
+  
+  .preferences-actions {
+    padding-top: 1rem;
+  }
+  
+  .save-preferences-btn {
+    width: 100%;
+    padding: 1rem;
   }
   
   .user-profile-tabs {

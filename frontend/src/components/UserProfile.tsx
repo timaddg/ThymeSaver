@@ -10,6 +10,13 @@ interface UserStats {
   lastActive: string;
 }
 
+interface DietaryRestriction {
+  id: string;
+  name: string;
+  icon: string;
+  category: 'allergy' | 'diet' | 'preference';
+}
+
 interface UserProfileProps {
   onClose: () => void;
 }
@@ -19,12 +26,86 @@ const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'stats'>('profile');
+  const [selectedDietaryRestrictions, setSelectedDietaryRestrictions] = useState<string[]>([]);
+  const [isSavingPreferences, setIsSavingPreferences] = useState(false);
+
+  // Comprehensive dietary restrictions list
+  const dietaryRestrictions: DietaryRestriction[] = [
+    // Allergies
+    { id: 'gluten', name: 'Gluten Allergy/Celiac', icon: '🌾', category: 'allergy' },
+    { id: 'nuts', name: 'Nut Allergy', icon: '🥜', category: 'allergy' },
+    { id: 'shellfish', name: 'Shellfish Allergy', icon: '🦐', category: 'allergy' },
+    { id: 'soy', name: 'Soy Allergy', icon: '🫘', category: 'allergy' },
+    { id: 'dairy', name: 'Dairy/Lactose Intolerance', icon: '🥛', category: 'allergy' },
+    { id: 'eggs', name: 'Egg Allergy', icon: '🥚', category: 'allergy' },
+    { id: 'fish', name: 'Fish Allergy', icon: '🐟', category: 'allergy' },
+    { id: 'sesame', name: 'Sesame Allergy', icon: '🌰', category: 'allergy' },
+    
+    // Dietary preferences
+    { id: 'vegetarian', name: 'Vegetarian', icon: '🌱', category: 'diet' },
+    { id: 'vegan', name: 'Vegan', icon: '🥬', category: 'diet' },
+    { id: 'keto', name: 'Ketogenic', icon: '🥩', category: 'diet' },
+    { id: 'paleo', name: 'Paleo', icon: '🦴', category: 'diet' },
+    { id: 'mediterranean', name: 'Mediterranean', icon: '🫒', category: 'diet' },
+    { id: 'lowcarb', name: 'Low Carb', icon: '🥒', category: 'diet' },
+    
+    // Other preferences
+    { id: 'halal', name: 'Halal', icon: '☪️', category: 'preference' },
+    { id: 'kosher', name: 'Kosher', icon: '✡️', category: 'preference' },
+    { id: 'lowsodium', name: 'Low Sodium', icon: '🧂', category: 'preference' },
+    { id: 'diabetic', name: 'Diabetic Friendly', icon: '💉', category: 'preference' }
+  ];
 
   useEffect(() => {
     if (user) {
       fetchUserStats();
+      loadDietaryPreferences();
     }
   }, [user]);
+
+  const loadDietaryPreferences = async () => {
+    if (!user) return;
+    
+    try {
+      // For now, load from localStorage. In production, this would be from your API
+      const savedPreferences = localStorage.getItem(`dietary_preferences_${user.id}`);
+      if (savedPreferences) {
+        setSelectedDietaryRestrictions(JSON.parse(savedPreferences));
+      }
+    } catch (error) {
+      console.error('Error loading dietary preferences:', error);
+    }
+  };
+
+  const saveDietaryPreferences = async () => {
+    if (!user) return;
+    
+    try {
+      setIsSavingPreferences(true);
+      // For now, save to localStorage. In production, this would be sent to your API
+      localStorage.setItem(`dietary_preferences_${user.id}`, JSON.stringify(selectedDietaryRestrictions));
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Show success feedback (you could add a toast notification here)
+      console.log('Dietary preferences saved successfully');
+    } catch (error) {
+      console.error('Error saving dietary preferences:', error);
+    } finally {
+      setIsSavingPreferences(false);
+    }
+  };
+
+  const toggleDietaryRestriction = (restrictionId: string) => {
+    setSelectedDietaryRestrictions(prev => {
+      if (prev.includes(restrictionId)) {
+        return prev.filter(id => id !== restrictionId);
+      } else {
+        return [...prev, restrictionId];
+      }
+    });
+  };
 
   const fetchUserStats = async () => {
     if (!user) return;
@@ -219,46 +300,105 @@ const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
           {activeTab === 'preferences' && (
             <div className="preferences-tab">
               <div className="preferences-section">
-                <h3 className="preferences-title">Dietary Preferences</h3>
-                <p className="preferences-subtitle">Coming soon! You'll be able to set your dietary restrictions here.</p>
+                <h3 className="preferences-title">Dietary Restrictions & Allergies</h3>
+                <p className="preferences-subtitle">Select all that apply to help us personalize your meal recommendations</p>
                 
-                <div className="preferences-placeholder">
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">🌱</span>
-                    <span>Vegetarian</span>
+                <div className="dietary-categories">
+                  <div className="category-section">
+                    <h4 className="category-title">🚨 Allergies & Intolerances</h4>
+                    <div className="dietary-grid">
+                      {dietaryRestrictions
+                        .filter(restriction => restriction.category === 'allergy')
+                        .map(restriction => (
+                          <div 
+                            key={restriction.id}
+                            className={`dietary-item ${selectedDietaryRestrictions.includes(restriction.id) ? 'selected' : ''}`}
+                            onClick={() => toggleDietaryRestriction(restriction.id)}
+                          >
+                            <span className="dietary-icon">{restriction.icon}</span>
+                            <span className="dietary-name">{restriction.name}</span>
+                            <div className="dietary-checkbox">
+                              {selectedDietaryRestrictions.includes(restriction.id) && '✓'}
+                            </div>
+                          </div>
+                        ))
+                      }
+                    </div>
                   </div>
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">🥛</span>
-                    <span>Dairy-Free</span>
+
+                  <div className="category-section">
+                    <h4 className="category-title">🌱 Dietary Preferences</h4>
+                    <div className="dietary-grid">
+                      {dietaryRestrictions
+                        .filter(restriction => restriction.category === 'diet')
+                        .map(restriction => (
+                          <div 
+                            key={restriction.id}
+                            className={`dietary-item ${selectedDietaryRestrictions.includes(restriction.id) ? 'selected' : ''}`}
+                            onClick={() => toggleDietaryRestriction(restriction.id)}
+                          >
+                            <span className="dietary-icon">{restriction.icon}</span>
+                            <span className="dietary-name">{restriction.name}</span>
+                            <div className="dietary-checkbox">
+                              {selectedDietaryRestrictions.includes(restriction.id) && '✓'}
+                            </div>
+                          </div>
+                        ))
+                      }
+                    </div>
                   </div>
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">🌾</span>
-                    <span>Gluten-Free</span>
-                  </div>
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">🥩</span>
-                    <span>Keto</span>
+
+                  <div className="category-section">
+                    <h4 className="category-title">🍽️ Other Preferences</h4>
+                    <div className="dietary-grid">
+                      {dietaryRestrictions
+                        .filter(restriction => restriction.category === 'preference')
+                        .map(restriction => (
+                          <div 
+                            key={restriction.id}
+                            className={`dietary-item ${selectedDietaryRestrictions.includes(restriction.id) ? 'selected' : ''}`}
+                            onClick={() => toggleDietaryRestriction(restriction.id)}
+                          >
+                            <span className="dietary-icon">{restriction.icon}</span>
+                            <span className="dietary-name">{restriction.name}</span>
+                            <div className="dietary-checkbox">
+                              {selectedDietaryRestrictions.includes(restriction.id) && '✓'}
+                            </div>
+                          </div>
+                        ))
+                      }
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="preferences-section">
-                <h3 className="preferences-title">Cooking Preferences</h3>
-                <p className="preferences-subtitle">Customize your cooking experience</p>
-                
-                <div className="preferences-placeholder">
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">⏱️</span>
-                    <span>Quick Meals (15-30 min)</span>
-                  </div>
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">🔥</span>
-                    <span>Spicy Food Lover</span>
-                  </div>
-                  <div className="placeholder-item">
-                    <span className="placeholder-icon">👨‍🍳</span>
-                    <span>Advanced Cooking</span>
-                  </div>
+
+                <div className="preferences-actions">
+                  <button 
+                    className="save-preferences-btn"
+                    onClick={saveDietaryPreferences}
+                    disabled={isSavingPreferences}
+                  >
+                    {isSavingPreferences ? (
+                      <>
+                        <div className="saving-spinner"></div>
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                          <polyline points="17,21 17,13 7,13 7,21"></polyline>
+                          <polyline points="7,3 7,8 15,8"></polyline>
+                        </svg>
+                        Save Preferences
+                      </>
+                    )}
+                  </button>
+                  
+                  {selectedDietaryRestrictions.length > 0 && (
+                    <p className="selection-summary">
+                      {selectedDietaryRestrictions.length} restriction{selectedDietaryRestrictions.length !== 1 ? 's' : ''} selected
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
