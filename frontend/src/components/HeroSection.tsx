@@ -110,7 +110,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ mealPlan, setMealPlan }) => {
       const planRes = await fetch('/api/generate-plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredients }),
+        body: JSON.stringify({ 
+          ingredients,
+          user_id: user.id  // Include user_id to fetch dietary preferences
+        }),
       });
       const planData = await planRes.json();
       if (!planData.success) throw new Error(planData.error || 'Failed to generate meal plan');
