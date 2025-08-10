@@ -312,10 +312,86 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Dietary Preferences endpoints
+app.post('/api/dietary-preferences', async (req, res) => {
+  try {
+    const { user_id, dietary_restrictions } = req.body;
+    
+    if (!user_id || !Array.isArray(dietary_restrictions)) {
+      return res.status(400).json({ error: 'user_id and dietary_restrictions array are required' });
+    }
+
+    // First, delete existing preferences for this user
+    await pool.query(
+      'DELETE FROM user_dietary_preferences WHERE user_id = $1',
+      [user_id]
+    );
+
+    // If no restrictions selected, just return success
+    if (dietary_restrictions.length === 0) {
+      return res.json({ 
+        success: true, 
+        message: 'Dietary preferences cleared successfully',
+        dietary_restrictions: []
+      });
+    }
+
+    // Insert new preferences
+    const values = [];
+    const params = [];
+    let paramIndex = 1;
+    
+    for (const restriction of dietary_restrictions) {
+      values.push(`($${paramIndex++}, $${paramIndex++})`);
+      params.push(user_id, restriction);
+    }
+    
+    const query = `INSERT INTO user_dietary_preferences (user_id, restriction_type) VALUES ${values.join(", ")} RETURNING *`;
+    const result = await pool.query(query, params);
+    
+    res.json({
+      success: true,
+      message: 'Dietary preferences saved successfully',
+      dietary_restrictions: result.rows.map(row => row.restriction_type)
+    });
+    
+  } catch (error) {
+    console.error('Error saving dietary preferences:', error);
+    res.status(500).json({ error: 'Failed to save dietary preferences' });
+  }
+});
+
+app.get('/api/dietary-preferences/:user_id', async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    
+    if (!user_id) {
+      return res.status(400).json({ error: 'user_id is required' });
+    }
+
+    const result = await pool.query(
+      'SELECT restriction_type FROM user_dietary_preferences WHERE user_id = $1 ORDER BY restriction_type',
+      [user_id]
+    );
+    
+    const dietary_restrictions = result.rows.map(row => row.restriction_type);
+    
+    res.json({
+      success: true,
+      dietary_restrictions
+    });
+    
+  } catch (error) {
+    console.error('Error fetching dietary preferences:', error);
+    res.status(500).json({ error: 'Failed to fetch dietary preferences' });
+  }
+});
+
 // Generate Meal Plan endpoint
 app.post('/api/generate-plan', async (req, res) => {
   try {
     const { 
+      user_id,
       dietaryRestrictions = [], 
       cuisinePreferences = [], 
       cookingTime = 'medium', 
@@ -323,27 +399,58 @@ app.post('/api/generate-plan', async (req, res) => {
       ingredients: userIngredients = [],
       skillLevel = 'intermediate'
     } = req.body;
+    
+    // If user_id is provided, fetch their dietary restrictions from database
+    let userDietaryRestrictions = dietaryRestrictions;
+    if (user_id) {
+      try {
+        const preferencesResult = await pool.query(
+          'SELECT restriction_type FROM user_dietary_preferences WHERE user_id = $1',
+          [user_id]
+        );
+        userDietaryRestrictions = preferencesResult.rows.map(row => row.restriction_type);
+      } catch (error) {
+        console.error('Error fetching user dietary preferences:', error);
+        // Continue with provided dietary restrictions if database fetch fails
+      }
+    }
+    
     // Use all stored ingredients if userIngredients is empty
     const allIngredients = userIngredients.length > 0
       ? userIngredients
       : ingredients.map(i => i.name);
+      
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
+    
+    // Build dietary restrictions context for the prompt
+    let dietaryContext = '';
+    if (userDietaryRestrictions.length > 0) {
+      dietaryContext = `\n\nIMPORTANT DIETARY RESTRICTIONS: The user has the following dietary restrictions that MUST be followed: ${userDietaryRestrictions.join(', ')}. 
+      
+CRITICAL RULES:
+- Do NOT suggest any dishes that contain these restricted ingredients
+- Ensure all suggested dishes are safe for the user's dietary needs
+- If a dish might contain restricted ingredients, suggest alternatives or clearly state it's safe`;
+    }
+    
     // Build the prompt for dish suggestions
-    const prompt = `You are a helpful cooking assistant. Based on the following available ingredients, suggest exactly 3 dishes that can be made using only these ingredients.
+    const prompt = `You are a helpful cooking assistant. Based on the following available ingredients, suggest exactly 3 dishes that can be made using only these ingredients.${dietaryContext}
 
 For each dish, provide:
 - The dish name
 - A short description
 - The main ingredients used from the list
 - Step-by-step cooking instructions (numbered steps, clear and concise)
+- Dietary compliance note (e.g., "Gluten-free", "Nut-free", "Vegetarian")
 
 Please format your response exactly like this example:
 
 1. Dish Name
 Brief description of the dish
 Main ingredients: ingredient1, ingredient2, ingredient3
+Dietary compliance: Gluten-free, Nut-free
 Instructions:
 1. Do this first.
 2. Do this next.
@@ -352,6 +459,7 @@ Instructions:
 2. Dish Name
 Brief description of the dish
 Main ingredients: ingredient1, ingredient2, ingredient3
+Dietary compliance: Vegetarian, Dairy-free
 Instructions:
 1. Do this first.
 2. Do this next.
@@ -360,6 +468,7 @@ Instructions:
 3. Dish Name
 Brief description of the dish
 Main ingredients: ingredient1, ingredient2, ingredient3
+Dietary compliance: Keto-friendly, Low-carb
 Instructions:
 1. Do this first.
 2. Do this next.
@@ -367,7 +476,7 @@ Instructions:
 
 Available Ingredients: ${allIngredients.join(', ') || 'None'}
 
-You do not have to use all the ingredients in each dish. Only suggest dishes that can reasonably be made with the provided ingredients. Keep descriptions short and appetizing.`;
+You do not have to use all the ingredients in each dish. Only suggest dishes that can reasonably be made with the provided ingredients and that respect all dietary restrictions. Keep descriptions short and appetizing.`;
     try {
       const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const result = await geminiModel.generateContent(prompt);
@@ -377,13 +486,14 @@ You do not have to use all the ingredients in each dish. Only suggest dishes tha
         success: true,
         mealPlan: text,
         parameters: {
-          dietaryRestrictions,
+          dietaryRestrictions: userDietaryRestrictions,
           cuisinePreferences,
           cookingTime,
           servings,
           ingredients: allIngredients,
           skillLevel
         },
+        userDietaryRestrictions: userDietaryRestrictions,
         timestamp: new Date().toISOString()
       });
     } catch (error) {

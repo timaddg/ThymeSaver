@@ -67,10 +67,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
     if (!user) return;
     
     try {
-      // For now, load from localStorage. In production, this would be from your API
-      const savedPreferences = localStorage.getItem(`dietary_preferences_${user.id}`);
-      if (savedPreferences) {
-        setSelectedDietaryRestrictions(JSON.parse(savedPreferences));
+      const response = await fetch(`/api/dietary-preferences/${user.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setSelectedDietaryRestrictions(data.dietary_restrictions);
+        }
+      } else {
+        console.error('Failed to load dietary preferences:', response.statusText);
       }
     } catch (error) {
       console.error('Error loading dietary preferences:', error);
@@ -82,16 +86,32 @@ const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
     
     try {
       setIsSavingPreferences(true);
-      // For now, save to localStorage. In production, this would be sent to your API
-      localStorage.setItem(`dietary_preferences_${user.id}`, JSON.stringify(selectedDietaryRestrictions));
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('/api/dietary-preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          dietary_restrictions: selectedDietaryRestrictions
+        })
+      });
       
-      // Show success feedback (you could add a toast notification here)
-      console.log('Dietary preferences saved successfully');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          console.log('Dietary preferences saved successfully:', data.message);
+          // Optionally show a success toast notification here
+        }
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to save dietary preferences:', errorData.error);
+        // Optionally show an error toast notification here
+      }
     } catch (error) {
       console.error('Error saving dietary preferences:', error);
+      // Optionally show an error toast notification here
     } finally {
       setIsSavingPreferences(false);
     }
