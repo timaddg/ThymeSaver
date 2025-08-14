@@ -61,51 +61,41 @@ const getIngredientDescription = (ingredientName: string): string => {
   return 'Freshly harvested, organic'; // Default description
 };
 
-// Helper function to get ingredient tags
-const getIngredientTags = (ingredientName: string): string[] => {
+// Helper function to get dietary classification
+const getDietaryClassification = (ingredientName: string): string => {
   const name = ingredientName.toLowerCase();
-  const tags: string[] = [];
   
-  // Add organic tag for most ingredients
-  if (!name.includes('sugar') && !name.includes('salt')) {
-    tags.push('Organic');
+  // Non-vegetarian ingredients (meat, fish, eggs)
+  if (name.includes('chicken') || name.includes('beef') || name.includes('pork') || 
+      name.includes('lamb') || name.includes('turkey') || name.includes('duck') ||
+      name.includes('fish') || name.includes('salmon') || name.includes('tuna') ||
+      name.includes('shrimp') || name.includes('crab') || name.includes('lobster') ||
+      name.includes('egg') || name.includes('eggs') || name.includes('meat')) {
+    return 'Non-Vegetarian';
   }
   
-  // Add specific tags based on ingredient type
+  // Vegan ingredients (no animal products)
   if (name.includes('tomato') || name.includes('tomatoes') || 
       name.includes('flour') || name.includes('wheat') ||
       name.includes('mushroom') || name.includes('garlic') ||
       name.includes('onion') || name.includes('pepper') ||
-      name.includes('cucumber')) {
-    tags.push('Vegan');
+      name.includes('cucumber') || name.includes('olive') ||
+      name.includes('oil') || name.includes('sugar') ||
+      name.includes('salt') || name.includes('rice') ||
+      name.includes('pasta') || name.includes('bean') ||
+      name.includes('lentil') || name.includes('chickpea') ||
+      name.includes('quinoa') || name.includes('oat')) {
+    return 'Vegan';
   }
   
-  if (name.includes('flour') || name.includes('wheat')) {
-    tags.push('Gluten-Free');
+  // Vegetarian ingredients (dairy, honey, etc.)
+  if (name.includes('butter') || name.includes('cheese') || name.includes('milk') ||
+      name.includes('yogurt') || name.includes('cream') || name.includes('honey')) {
+    return 'Vegetarian';
   }
   
-  if (name.includes('olive') || name.includes('oil')) {
-    tags.push('Cold-Pressed');
-  }
-  
-  if (name.includes('chicken') || name.includes('meat')) {
-    tags.push('Free-Range');
-  }
-  
-  if (name.includes('fish') || name.includes('salmon')) {
-    tags.push('Wild-Caught');
-  }
-  
-  if (name.includes('butter')) {
-    tags.push('Grass-Fed');
-  }
-  
-  // Ensure we always have at least one tag
-  if (tags.length === 0) {
-    tags.push('Fresh');
-  }
-  
-  return tags;
+  // Default to vegetarian for unknown ingredients
+  return 'Vegetarian';
 };
 
 const IngredientSection: React.FC = () => {
@@ -166,6 +156,11 @@ const IngredientSection: React.FC = () => {
           <div className="ingredient-entry" key={ingredient.id}>
             <div className="ingredient-entry-content">
               <div className="ingredient-name">{ingredient.name}</div>
+              <div className="dietary-classification">
+                <span className={`dietary-tag ${getDietaryClassification(ingredient.name).toLowerCase().replace(/\s+/g, '-')}`}>
+                  {getDietaryClassification(ingredient.name)}
+                </span>
+              </div>
             </div>
           </div>
         ))}
