@@ -165,24 +165,7 @@ const IngredientSection: React.FC = () => {
         {ingredients.map(ingredient => (
           <div className="ingredient-entry" key={ingredient.id}>
             <div className="ingredient-entry-content">
-              <div className="ingredient-icon-container">
-                <span className="ingredient-entry-icon">
-                  {getIngredientIcon(ingredient.name)}
-                </span>
-              </div>
-              <div className="ingredient-details">
-                <div className="ingredient-name">{ingredient.name}</div>
-                <div className="ingredient-description">
-                  {getIngredientDescription(ingredient.name)}
-                </div>
-              </div>
-              <div className="ingredient-tags">
-                {getIngredientTags(ingredient.name).map((tag, index) => (
-                  <span key={index} className={`ingredient-tag ${tag.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <div className="ingredient-name">{ingredient.name}</div>
             </div>
           </div>
         ))}

@@ -358,97 +358,19 @@
 .ingredient-entry-content {
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
-
-.ingredient-icon-container {
-  flex-shrink: 0;
-}
-
-.ingredient-entry-icon {
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: #f8f9fa;
-}
-
-.ingredient-details {
-  flex: 1;
-  min-width: 0;
+  padding: 0.5rem 0;
 }
 
 .ingredient-name {
   font-size: 1.1rem;
   font-weight: 700;
   color: #222;
-  margin-bottom: 0.2rem;
   font-family: 'Base Neue', Arial, sans-serif;
+  text-align: center;
 }
 
-.ingredient-description {
-  font-size: 0.9rem;
-  color: #666;
-  font-family: 'Base Neue', Arial, sans-serif;
-}
 
-.ingredient-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.ingredient-tag {
-  padding: 0.3rem 0.8rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  font-family: 'Base Neue', Arial, sans-serif;
-  color: #222;
-}
-
-.ingredient-tag.organic {
-  background: #e8f5e8;
-  color: #2d5a2d;
-}
-
-.ingredient-tag.vegan {
-  background: #e8f5e8;
-  color: #2d5a2d;
-}
-
-.ingredient-tag.gluten-free {
-  background: #f5f0e8;
-  color: #8b4513;
-}
-
-.ingredient-tag.cold-pressed {
-  background: #e8f0f5;
-  color: #2d5a8b;
-}
-
-.ingredient-tag.free-range {
-  background: #f5e8f0;
-  color: #8b2d5a;
-}
-
-.ingredient-tag.wild-caught {
-  background: #e8f5f0;
-  color: #2d8b5a;
-}
-
-.ingredient-tag.grass-fed {
-  background: #f0f5e8;
-  color: #5a8b2d;
-}
-
-.ingredient-tag.fresh {
-  background: #f0e8f5;
-  color: #5a2d8b;
-}
 
 .ingredient-footer {
   text-align: center;
@@ -470,16 +392,6 @@
 }
 
 @media (max-width: 900px) {
-  .ingredient-entry-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
-  }
-  
-  .ingredient-tags {
-    align-self: flex-start;
-  }
-  
   .ingredient-header {
     flex-direction: column;
     align-items: flex-start;
