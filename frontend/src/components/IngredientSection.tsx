@@ -103,6 +103,7 @@ const IngredientSection: React.FC = () => {
   const [ingredients, setIngredients] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -120,6 +121,30 @@ const IngredientSection: React.FC = () => {
       .catch(() => setError('Failed to fetch ingredients.'))
       .finally(() => setLoading(false));
   }, [user]);
+
+  const handleDeleteIngredient = async (ingredientId: number) => {
+    if (!user) return;
+    
+    setDeletingId(ingredientId);
+    try {
+      const response = await fetch(`/api/ingredients/${ingredientId}?user_id=${user.id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        // Remove the ingredient from the local state
+        setIngredients(prevIngredients => 
+          prevIngredients.filter(ingredient => ingredient.id !== ingredientId)
+        );
+      } else {
+        setError('Failed to delete ingredient');
+      }
+    } catch (err) {
+      setError('Failed to delete ingredient');
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   if (!user) {
     return (
@@ -152,18 +177,35 @@ const IngredientSection: React.FC = () => {
       {loading && <div className="ingredient-section-message">Loading...</div>}
       {error && <div className="ingredient-section-message">{error}</div>}
       <div className="ingredient-list">
-        {ingredients.map(ingredient => (
-          <div className="ingredient-entry" key={ingredient.id}>
-            <div className="ingredient-entry-content">
-              <div className="ingredient-name">{ingredient.name}</div>
-              <div className="dietary-classification">
-                <span className={`dietary-tag ${getDietaryClassification(ingredient.name).toLowerCase().replace(/\s+/g, '-')}`}>
-                  {getDietaryClassification(ingredient.name)}
-                </span>
+        {ingredients.map(ingredient => {
+          const dietaryType = getDietaryClassification(ingredient.name);
+          const isVegetarian = dietaryType === 'Vegetarian';
+          
+          return (
+            <div className="ingredient-entry" key={ingredient.id}>
+              <div className="ingredient-entry-content">
+                <div className="ingredient-name">{ingredient.name}</div>
+                <div className="ingredient-actions">
+                  <div className="dietary-classification">
+                    <span className={`dietary-tag ${dietaryType.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {dietaryType}
+                    </span>
+                  </div>
+                  {isVegetarian && (
+                    <button
+                      className="delete-ingredient-btn"
+                      onClick={() => handleDeleteIngredient(ingredient.id)}
+                      disabled={deletingId === ingredient.id}
+                      title="Delete ingredient"
+                    >
+                      {deletingId === ingredient.id ? '🗑️' : '🗑️'}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div className="ingredient-footer">
         <a href="/ingredients" className="view-all-link">View all ingredients</a>

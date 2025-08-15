@@ -369,6 +369,13 @@
   font-family: 'Base Neue', Arial, sans-serif;
 }
 
+.ingredient-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+}
+
 .dietary-classification {
   flex-shrink: 0;
 }
@@ -397,6 +404,38 @@
 .dietary-tag.non-vegetarian {
   background: #f8d7da;
   color: #721c24;
+}
+
+.delete-ingredient-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  transition: all 0.2s ease;
+  color: #dc3545;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.delete-ingredient-btn:hover {
+  background: #f8d7da;
+  color: #721c24;
+  transform: scale(1.1);
+}
+
+.delete-ingredient-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.delete-ingredient-btn:active {
+  transform: scale(0.95);
 }
 
 
