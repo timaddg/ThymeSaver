@@ -179,7 +179,6 @@ const IngredientSection: React.FC = () => {
       <div className="ingredient-list">
         {ingredients.map(ingredient => {
           const dietaryType = getDietaryClassification(ingredient.name);
-          const isVegetarian = dietaryType === 'Vegetarian';
           
           return (
             <div className="ingredient-entry" key={ingredient.id}>
@@ -191,16 +190,14 @@ const IngredientSection: React.FC = () => {
                       {dietaryType}
                     </span>
                   </div>
-                  {isVegetarian && (
-                    <button
-                      className="delete-ingredient-btn"
-                      onClick={() => handleDeleteIngredient(ingredient.id)}
-                      disabled={deletingId === ingredient.id}
-                      title="Delete ingredient"
-                    >
-                      {deletingId === ingredient.id ? '🗑️' : '🗑️'}
-                    </button>
-                  )}
+                  <button
+                    className="delete-ingredient-btn"
+                    onClick={() => handleDeleteIngredient(ingredient.id)}
+                    disabled={deletingId === ingredient.id}
+                    title="Delete ingredient"
+                  >
+                    {deletingId === ingredient.id ? '🗑️' : '🗑️'}
+                  </button>
                 </div>
               </div>
             </div>
