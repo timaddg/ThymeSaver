@@ -411,21 +411,37 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 0.3rem;
-  border-radius: 0.3rem;
-  transition: all 0.2s ease;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
   color: #dc3545;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 32px;
   height: 32px;
+  position: relative;
+  overflow: hidden;
 }
 
 .delete-ingredient-btn:hover {
   background: #f8d7da;
   color: #721c24;
-  transform: scale(1.1);
+  transform: scale(1.05);
+  min-width: 80px;
+  padding: 0.3rem 0.8rem;
+}
+
+.delete-ingredient-btn:hover::after {
+  content: "Delete";
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Base Neue', Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 0.3rem;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 .delete-ingredient-btn:disabled {
