@@ -111,13 +111,14 @@ const IngredientSection: React.FC = () => {
     setError(null);
     fetch(`/api/ingredients?user_id=${user.id}`)
       .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setIngredients(data.ingredients);
-        } else {
-          setError('Failed to fetch ingredients.');
-        }
-      })
+              .then(data => {
+          if (data.success) {
+            console.log('Fetched ingredients:', data.ingredients);
+            setIngredients(data.ingredients);
+          } else {
+            setError('Failed to fetch ingredients.');
+          }
+        })
       .catch(() => setError('Failed to fetch ingredients.'))
       .finally(() => setLoading(false));
   }, [user]);
@@ -127,20 +128,33 @@ const IngredientSection: React.FC = () => {
     
     setDeletingId(ingredientId);
     try {
+      console.log('Attempting to delete ingredient:', ingredientId, 'for user:', user.id);
+      
       const response = await fetch(`/api/ingredients/${ingredientId}?user_id=${user.id}`, {
         method: 'DELETE',
       });
       
+      console.log('Delete response status:', response.status);
+      
       if (response.ok) {
+        const responseData = await response.json();
+        console.log('Delete successful:', responseData);
+        
         // Remove the ingredient from the local state
         setIngredients(prevIngredients => 
-          prevIngredients.filter(ingredient => ingredient.id !== ingredientId)
+          prevIngredients.filter(ingredient => ingredient.ingredient_id !== ingredientId)
         );
+        
+        // Clear any previous errors
+        setError(null);
       } else {
-        setError('Failed to delete ingredient');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Delete failed:', response.status, errorData);
+        setError(`Failed to delete ingredient: ${errorData.error || 'Unknown error'}`);
       }
     } catch (err) {
-      setError('Failed to delete ingredient');
+      console.error('Delete error:', err);
+      setError('Failed to delete ingredient: Network error');
     } finally {
       setDeletingId(null);
     }
@@ -181,7 +195,7 @@ const IngredientSection: React.FC = () => {
           const dietaryType = getDietaryClassification(ingredient.name);
           
           return (
-            <div className="ingredient-entry" key={ingredient.id}>
+            <div className="ingredient-entry" key={ingredient.ingredient_id}>
               <div className="ingredient-entry-content">
                 <div className="ingredient-name">{ingredient.name}</div>
                 <div className="ingredient-actions">
@@ -192,11 +206,11 @@ const IngredientSection: React.FC = () => {
                   </div>
                   <button
                     className="delete-ingredient-btn"
-                    onClick={() => handleDeleteIngredient(ingredient.id)}
-                    disabled={deletingId === ingredient.id}
+                    onClick={() => handleDeleteIngredient(ingredient.ingredient_id)}
+                    disabled={deletingId === ingredient.ingredient_id}
                     title="Delete ingredient"
                   >
-                    {deletingId === ingredient.id ? '🗑️' : '🗑️'}
+                    {deletingId === ingredient.ingredient_id ? '🗑️' : '🗑️'}
                   </button>
                 </div>
               </div>

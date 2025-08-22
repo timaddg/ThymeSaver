@@ -82,7 +82,7 @@ app.delete('/api/ingredients/:id', async (req, res) => {
   if (user_id) {
     try {
       const result = await pool.query(
-        'DELETE FROM ingredients WHERE id = $1 AND user_id = $2 RETURNING *',
+        'DELETE FROM ingredients WHERE ingredient_id = $1 AND user_id = $2 RETURNING *',
         [id, user_id]
       );
       if (result.rows.length === 0) {
