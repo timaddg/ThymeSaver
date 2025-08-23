@@ -15,8 +15,8 @@ function parseDishes(response: string) {
   // Try multiple parsing strategies
   let dishes = null;
 
-  // Strategy 1: More flexible pattern that handles variations in formatting
-  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)(?:\nInstructions:\n((?:\d+\. .+\n?)+))?/gi;
+  // Strategy 1: Improved pattern that better captures the Gemini response format
+  const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)(?:\nDietary compliance:\s*([^\n]+))?\nInstructions:\n((?:\d+\. .+\n?)+)/gi;
   let matches = Array.from(response.matchAll(dishRegex));
 
   if (matches.length > 0) {
@@ -24,20 +24,28 @@ function parseDishes(response: string) {
       name: m[1].trim(),
       description: m[2].trim(),
       ingredients: m[3].split(',').map((i) => i.trim()),
-      instructions: m[4] ? m[4]
+      instructions: m[5] ? m[5]
         .split(/\n/)
         .filter((line) => line.trim())
         .map((line) => line.replace(/^\d+\.\s*/, '').trim()) : [],
     }));
   } else {
-    // Strategy 2: Look for numbered dishes with description on next line
+    // Strategy 2: More flexible parsing for different formats
     const lines = response.split('\n').filter(line => line.trim());
     const dishBlocks = [];
-    let currentBlock = null;
+    let currentBlock: {
+      name: string;
+      description: string;
+      ingredients: string[];
+      instructions: string[];
+    } | null = null;
+    let inInstructions = false;
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
+      
       if (/^\d+\./.test(line)) {
+        // New dish block
         if (currentBlock) {
           dishBlocks.push(currentBlock);
         }
@@ -47,9 +55,22 @@ function parseDishes(response: string) {
           ingredients: [],
           instructions: []
         };
-      } else if (currentBlock && !currentBlock.description && line.trim()) {
-        // First non-empty line after dish name is description
-        currentBlock.description = line.trim();
+        inInstructions = false;
+      } else if (currentBlock) {
+        if (!currentBlock.description && line.trim() && !line.includes('Main ingredients:') && !line.includes('Instructions:') && !line.includes('Dietary compliance:')) {
+          // First non-empty line after dish name is description
+          currentBlock.description = line.trim();
+        } else if (line.includes('Main ingredients:')) {
+          // Extract ingredients
+          const ingredientsText = line.replace('Main ingredients:', '').trim();
+          currentBlock.ingredients = ingredientsText.split(',').map(i => i.trim());
+        } else if (line.includes('Instructions:')) {
+          // Start collecting instructions
+          inInstructions = true;
+        } else if (inInstructions && /^\d+\./.test(line)) {
+          // This is an instruction step
+          currentBlock.instructions.push(line.replace(/^\d+\.\s*/, '').trim());
+        }
       }
     }
     
@@ -65,6 +86,40 @@ function parseDishes(response: string) {
         instructions: block.instructions || [],
       }));
     }
+  }
+
+  // Strategy 3: Fallback parsing for simpler formats
+  if (!dishes || dishes.length === 0) {
+    const sections = response.split(/\d+\./).filter(section => section.trim());
+    dishes = sections.slice(0, 3).map((section, idx) => {
+      const lines = section.split('\n').filter(line => line.trim());
+      const name = lines[0]?.trim() || `Dish ${idx + 1}`;
+      const description = lines[1]?.trim() || 'A delicious dish made with available ingredients';
+      
+      // Look for ingredients and instructions in the section
+      let ingredients: string[] = [];
+      let instructions: string[] = [];
+      
+      for (const line of lines) {
+        if (line.includes('Main ingredients:')) {
+          ingredients = line.replace('Main ingredients:', '').trim().split(',').map(i => i.trim());
+        } else if (line.includes('Instructions:')) {
+          // Find all numbered instruction lines after this
+          const instructionLines = lines.slice(lines.indexOf(line) + 1);
+          instructions = instructionLines
+            .filter(l => /^\d+\./.test(l))
+            .map(l => l.replace(/^\d+\.\s*/, '').trim());
+          break;
+        }
+      }
+      
+      return {
+        name,
+        description,
+        ingredients,
+        instructions
+      };
+    });
   }
 
   console.log('Parsed dishes:', dishes); // Debug log
