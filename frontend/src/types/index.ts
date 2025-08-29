@@ -1,7 +1,9 @@
 export interface Ingredient {
-  id: number;
+  ingredient_id: number;
+  user_id: number;
   name: string;
-  details?: string;
+  quantity?: string;
+  created_at?: string;
 }
 
 export interface ApiResponse {

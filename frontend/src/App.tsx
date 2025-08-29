@@ -9,7 +9,7 @@ import DishHistory from './components/DishHistory';
 import OurStory from './components/OurStory';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
   const [mealPlan, setMealPlan] = useState<string | null>(null);
   return (
     <AuthProvider>

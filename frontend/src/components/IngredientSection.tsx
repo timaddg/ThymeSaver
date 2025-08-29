@@ -1,27 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './IngredientSection.css';
-import salmonBowlImg from '../assets/Salmon.jpg';
-import chickenTacosImg from '../assets/ChickenTacos.jpg';
-import mushroomImg from '../assets/mushroom.jpg';
 
-const RANDOM_DISHES = [
-  {
-    name: 'Lemon Herb Salmon',
-    time: '25 MINS',
-    image: salmonBowlImg,
-  },
-  {
-    name: 'Spicy Chicken Tacos',
-    time: '25 MINS',
-    image: chickenTacosImg,
-  },
-  {
-    name: 'Mushroom Risotto',
-    time: '25 MINS',
-    image: mushroomImg,
-  },
-];
+
 
 // Helper function to get ingredient icon based on name
 const getIngredientIcon = (ingredientName: string): string => {
@@ -165,15 +146,9 @@ const IngredientSection: React.FC = () => {
       <section className="ingredient-section-root menu-section">
         <h2 className="ingredient-section-title">This Week’s Menu</h2>
         <div className="menu-cards-row">
-          {RANDOM_DISHES.map((dish, idx) => (
-            <div className="menu-card" key={idx}>
-              <img src={dish.image} alt={dish.name} className="menu-card-img" />
-              <div className="menu-card-row">
-                <div className="menu-card-name">{dish.name}</div>
-                <div className="menu-card-time">{dish.time}</div>
-              </div>
-            </div>
-          ))}
+          <div className="menu-card">
+            <div className="menu-card-name">Please log in to view your ingredients</div>
+          </div>
         </div>
       </section>
     );

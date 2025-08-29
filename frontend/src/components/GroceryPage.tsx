@@ -2,47 +2,45 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import ReceiptUpload from './ReceiptUpload';
 import './GroceryPage.css';
-import salmonImg from '../assets/Salmon.jpg';
-import chickenTacosImg from '../assets/ChickenTacos.jpg';
-import mushroomImg from '../assets/mushroom.jpg';
-import onionImg from '../assets/onion.jpg';
-import cucumberImg from '../assets/cucumber.jpg';
-import garlicImg from '../assets/garlic.jpg';
-import pastaImg from '../assets/pasta.jpg';
 
 
 const PLACEHOLDER_IMG = 'https://images.unsplash.com/photo-1504674902479-cc8363a57a48?auto=format&fit=crop&w=500&q=90';
 
 const PRODUCT_INGREDIENTS = [
-  { ingredient_id: 1, name: 'Onion', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: onionImg },
-  { ingredient_id: 2, name: 'Tomato', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 3, name: 'Cucumber', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: cucumberImg },
-  { ingredient_id: 4, name: 'Potato', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 5, name: 'Garlic', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: garlicImg },
-  { ingredient_id: 6, name: 'Carrot', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 7, name: 'Spinach', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 8, name: 'Broccoli', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 9, name: 'Chicken Breast', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 10, name: 'Eggs', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 11, name: 'Milk', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 12, name: 'Cheese', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 13, name: 'Rice', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 14, name: 'Pasta', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: pastaImg },
-  { ingredient_id: 15, name: 'Beef', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 16, name: 'Pork', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 17, name: 'Fish', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: salmonImg },
-  { ingredient_id: 18, name: 'Salt', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 19, name: 'Pepper', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 20, name: 'Oil', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 21, name: 'Butter', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 22, name: 'Flour', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 23, name: 'Sugar', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 24, name: 'Chicken Thighs', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 25, name: 'Steak', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: PLACEHOLDER_IMG },
-  { ingredient_id: 26, name: 'Salmon', quantity: '0', created_at: '2024-06-01T10:00:00Z', image: salmonImg },
+  { ingredient_id: 1, name: 'Onion', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 2, name: 'Tomato', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 3, name: 'Cucumber', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 4, name: 'Potato', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 5, name: 'Garlic', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 6, name: 'Carrot', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 7, name: 'Spinach', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 8, name: 'Broccoli', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 9, name: 'Chicken Breast', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 10, name: 'Eggs', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 11, name: 'Milk', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 12, name: 'Cheese', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 13, name: 'Rice', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 14, name: 'Pasta', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 15, name: 'Beef', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 16, name: 'Pork', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 17, name: 'Fish', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 18, name: 'Salt', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 19, name: 'Pepper', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 20, name: 'Oil', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 21, name: 'Butter', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 22, name: 'Flour', quantity: '0', created_at: '2024-02-01T10:00:00Z' },
+  { ingredient_id: 23, name: 'Sugar', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 24, name: 'Chicken Thighs', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 25, name: 'Steak', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
+  { ingredient_id: 26, name: 'Salmon', quantity: '0', created_at: '2024-06-01T10:00:00Z' },
 ];
 
-const getIngredientImage = (ingredient: any) => {
+interface IngredientItem {
+  name: string;
+  image?: string;
+}
+
+const getIngredientImage = (ingredient: IngredientItem): string => {
   // If a local image is provided, use it
   if (ingredient.image && !ingredient.image.includes('unsplash.com')) return ingredient.image;
   

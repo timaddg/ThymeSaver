@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './HeroSection.css';
-import heroImg from '../assets/hero-bowl.jpg'; // You should add a food image to this path
 import DishSection from './DishSection';
+
+// Proper TypeScript interfaces
+interface Dish {
+  name: string;
+  description: string;
+  ingredients: string[];
+  instructions: string[];
+}
 
 interface HeroSectionProps {
   mealPlan: string | null;
   setMealPlan: (plan: string | null) => void;
 }
 
-function parseDishes(response: string) {
+function parseDishes(response: string): Dish[] {
   console.log('Raw Gemini response:', response); // Debug log
 
   // Try multiple parsing strategies
-  let dishes = null;
+  let dishes: Dish[] | null = null;
 
   // Strategy 1: Improved pattern that better captures the Gemini response format
   const dishRegex = /\d+\.\s*([^\n]+)\n([^\n]+)\nMain ingredients:\s*([^\n]+)(?:\nDietary compliance:\s*([^\n]+))?\nInstructions:\n((?:\d+\. .+\n?)+)/gi;
@@ -33,12 +40,7 @@ function parseDishes(response: string) {
     // Strategy 2: More flexible parsing for different formats
     const lines = response.split('\n').filter(line => line.trim());
     const dishBlocks = [];
-    let currentBlock: {
-      name: string;
-      description: string;
-      ingredients: string[];
-      instructions: string[];
-    } | null = null;
+    let currentBlock: Dish | null = null;
     let inInstructions = false;
     
     for (let i = 0; i < lines.length; i++) {
